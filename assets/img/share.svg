@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#131228"/>
+  <g opacity=".18" stroke="#B9BAFF" stroke-width="1">
+    <path d="M0 400h1200M0 430h1200M0 460h1200"/>
+  </g>
+  <text x="72" y="120" font-family="monospace" font-size="20" letter-spacing="4" fill="#B9BAFF">SIGNAL · JAKARTA</text>
+  <text x="72" y="250" font-family="Georgia,serif" font-size="82" fill="#F3EFE7">I don’t stop</text>
+  <text x="72" y="336" font-family="Georgia,serif" font-size="82" fill="#F3EFE7">at the deck.</text>
+  <text x="72" y="430" font-family="monospace" font-size="22" letter-spacing="3" fill="#9FA0FF">FAUZI FADHLURROHMAN</text>
+  <text x="72" y="470" font-family="monospace" font-size="19" letter-spacing="2" fill="#8A8AAE">MARKETING &amp; COMMUNICATIONS STRATEGIST</text>
+  <rect x="72" y="540" width="220" height="6" fill="#FF7171"/>
+  <text x="1128" y="552" text-anchor="end" font-family="monospace" font-size="19" letter-spacing="3" fill="#8A8AAE">88.1 — 107.1 MHz</text>
+</svg>
