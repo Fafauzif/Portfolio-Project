@@ -2,21 +2,22 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 
-test('controls are real buttons or links with names', async () => {
+test('primary navigation and interactive project targets use native links', async () => {
   const html = await readFile('index.html', 'utf8');
-  assert.ok(!/<div[^>]+onclick=/.test(html), 'click handler on a div');
-  assert.ok(html.includes('aria-live="polite"'));
-  assert.ok(html.includes('role="dialog"'));
-  assert.ok(/aria-label="[^"]+"/.test(html));
-  assert.ok(html.includes('aria-modal="true"'));
+
+  assert.match(html, /<nav[^>]+aria-label="Main navigation"/);
+  assert.doesNotMatch(html, /<div[^>]+onclick=/);
+  for (const href of ['still-we-grow', 'referral-engine', 'naming-the-problem']) {
+    assert.ok(html.includes(`href="work/${href}/"`), `missing project link for ${href}`);
+  }
 });
 
-test('no literal font-size below 11px in any stylesheet', async () => {
-  for (const n of ['tokens','base','instrument','report','sheet']) {
-    const f = `assets/css/${n}.css`;
-    const css = await readFile(f, 'utf8');
-    for (const m of css.matchAll(/font-size:\s*([\d.]+)px/g)) {
-      assert.ok(Number(m[1]) >= 11, `${f}: ${m[0]}`);
+test('no literal font-size below 11px in the stylesheets', async () => {
+  for (const name of ['tokens', 'base', 'instrument', 'report', 'sheet', 'portfolio', 'portfolio-motion', 'pages']) {
+    const path = `assets/css/${name}.css`;
+    const css = await readFile(path, 'utf8');
+    for (const match of css.matchAll(/font-size:\s*([\d.]+)px/g)) {
+      assert.ok(Number(match[1]) >= 11, `${path}: ${match[0]}`);
     }
   }
 });

@@ -1,6 +1,6 @@
 import http from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
-import { extname, join, normalize, resolve } from 'node:path';
+import { basename, extname, join, normalize, resolve, sep } from 'node:path';
 
 const ROOT = resolve(process.cwd());
 const PORT = Number(process.env.PORT || 4321);
@@ -12,17 +12,25 @@ const TYPES = {
   '.woff2': 'font/woff2',
   '.svg': 'image/svg+xml',
   '.png': 'image/png',
+  '.webp': 'image/webp',
+  '.avif': 'image/avif',
   '.json': 'application/json; charset=utf-8',
 };
 
 http.createServer(async (req, res) => {
   try {
-    let path = decodeURIComponent((req.url || '/').split('?')[0]);
+    const request = new URL(req.url || '/', 'http://localhost');
+    let path = decodeURIComponent(request.pathname);
     if (path.endsWith('/')) path += 'index.html';
     const file = normalize(join(ROOT, path));
-    if (!file.startsWith(ROOT)) { res.writeHead(403).end('forbidden'); return; }
+    if (file !== ROOT && !file.startsWith(ROOT + sep)) { res.writeHead(403).end('forbidden'); return; }
     const info = await stat(file).catch(() => null);
-    const target = info?.isDirectory() ? join(file, 'index.html') : file;
+    if (info?.isDirectory()) {
+      const location = './' + encodeURIComponent(basename(file)) + '/' + request.search;
+      res.writeHead(308, { Location: location }).end();
+      return;
+    }
+    const target = file;
     const body = await readFile(target);
     res.writeHead(200, {
       'Content-Type': TYPES[extname(target)] || 'application/octet-stream',

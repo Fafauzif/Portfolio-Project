@@ -1,0 +1,218 @@
+/* Fieldwork is one sheet, with two hinges in sequence. The scene's markup
+   supplies the stills; this file only adds treatment to the decorative art. */
+[data-fold-scene] {
+  --poster-art: url("../img/poster-print.webp");
+  --poster-ratio: 4 / 3;
+}
+
+.poster-frame {
+  position: relative;
+  aspect-ratio: var(--poster-ratio);
+  perspective: 2600px;
+}
+
+.poster-still {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: contain;
+}
+
+.poster-still img,
+.poster-still--open img {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: contain;
+}
+
+.poster-still--open,
+.poster-sheet,
+.poster-handoff {
+  display: none;
+}
+
+.poster-sheet,
+.poster-panel,
+.poster-hinge,
+.poster-handoff {
+  position: absolute;
+  inset-block: 0;
+}
+
+.poster-sheet {
+  inset-inline: 0;
+  transform-style: preserve-3d;
+  transform:
+    translate3d(var(--fold-x, 0%), var(--fold-y, 0%), 0)
+    scale(var(--fold-scale, 1))
+    rotateZ(var(--fold-roll, 0deg))
+    rotateX(var(--fold-pitch, 0deg))
+    rotateY(var(--fold-yaw, 0deg));
+}
+
+.poster-hinge {
+  transform-origin: left center;
+  transform-style: preserve-3d;
+}
+
+.poster-hinge--middle {
+  inset-inline-start: 33.333333%;
+  inline-size: 33.333333%;
+  transform: rotateY(var(--fold-middle, 0deg));
+}
+
+.poster-hinge--end {
+  inset-inline-start: 100%;
+  inline-size: 100%;
+  transform: rotateY(var(--fold-end, 0deg));
+}
+
+.poster-panel {
+  /* One continuous print, sampled at the position owned by each leaf. */
+  inset-inline-start: 0;
+  inline-size: 100%;
+  background: #b7d4f3 var(--poster-art) var(--panel-slice) center / 300% 100% no-repeat;
+  backface-visibility: hidden;
+}
+
+.poster-panel--one {
+  --panel-slice: 0%;
+  --panel-shade: var(--fold-shade-one, 0);
+  inline-size: 33.333333%;
+}
+
+.poster-panel--two {
+  --panel-slice: 50%;
+  --panel-shade: var(--fold-shade-two, 0);
+}
+
+.poster-panel--three {
+  --panel-slice: 100%;
+  --panel-shade: var(--fold-shade-three, 0);
+}
+
+.poster-panel::before,
+.poster-panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.poster-panel::before {
+  background: linear-gradient(112deg, #e9ffff 8%, #c5e8ff 58%, #6fa1e5 100%);
+  mix-blend-mode: screen;
+  opacity: var(--fold-light, 0);
+}
+
+.poster-panel::after {
+  background: linear-gradient(99deg, #10182e, #243860 32%, #101d46 100%);
+  opacity: var(--panel-shade);
+}
+
+.poster-handoff {
+  pointer-events: none;
+  inset-inline: 0;
+  inline-size: 100%;
+  aspect-ratio: auto;
+  transform: translateZ(2px);
+  clip-path: inset(0 var(--fold-handoff, 100%) 0 0);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-fold-ready] .poster-still {
+    visibility: hidden;
+  }
+
+  [data-fold-ready] :is(.poster-sheet, .poster-handoff) {
+    display: block;
+  }
+
+  [data-fold-ready] .poster-frame::before {
+    content: "";
+    position: absolute;
+    inset: 26% -8% -11% -8%;
+    pointer-events: none;
+    background: radial-gradient(ellipse at 50% 52%, rgb(0 0 17 / .61), rgb(0 0 17 / .29) 42%, transparent 69%);
+    transform:
+      translate3d(0, var(--fold-shadow-y, 16%), -25px)
+      scaleX(var(--fold-shadow-scale, 1))
+      scaleY(.77);
+  }
+
+  [data-fold-ready][data-fold-complete] .poster-frame::before {
+    visibility: hidden;
+  }
+
+  /* Only the decorative clone crosses the section boundary; the destination
+     anchor stays in the document and retains its pointer and focus behavior. */
+  .hero:has([data-fold-transferring]) {
+    z-index: 2;
+  }
+
+  [data-fold-transferring] .poster-handoff {
+    transform-origin: left top;
+    transform:
+      translate(var(--fold-flight-x, 0px), var(--fold-flight-y, 0px))
+      scale(var(--fold-flight-width, 1), var(--fold-flight-height, 1));
+  }
+
+  [data-fold-complete] .poster-sheet,
+  [data-fold-arrived] .poster-handoff {
+    visibility: hidden;
+  }
+
+  .lead-project:not(:has(.project-link:focus-visible)) [data-fold-await] {
+    background: transparent;
+  }
+
+  .lead-project:not(:has(.project-link:focus-visible)) [data-fold-await] > .case-art {
+    visibility: hidden;
+  }
+}
+
+@media (max-width: 760px) {
+  [data-fold-scene] {
+    --poster-art: url("../img/poster-print-mobile.webp");
+    --poster-ratio: 1;
+  }
+
+  .poster-frame {
+    perspective: 1800px;
+  }
+
+  .poster-panel {
+    background-size: 200% 100%;
+  }
+
+  .poster-panel--one,
+  .poster-hinge--middle {
+    inline-size: 50%;
+  }
+
+  .poster-hinge--middle {
+    inset-inline-start: 50%;
+  }
+
+  .poster-panel--two {
+    --panel-slice: 100%;
+  }
+
+  .poster-hinge--end {
+    display: none;
+  }
+
+  [data-fold-ready] .poster-handoff {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .poster-frame:has(.poster-still--open) .poster-still:not(.poster-still--open) {
+    display: none;
+  }
+
+  .poster-still--open {
+    display: block;
+  }
+}
