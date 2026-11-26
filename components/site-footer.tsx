@@ -2,7 +2,7 @@ import type { SiteContent } from '@/lib/content';
 
 export default function SiteFooter({ site }: { site: SiteContent }) {
   return (
-    <footer className="site-footer">
+    <footer className="site-footer" data-pointer-tone="navy">
       <div className="wrap">
         <div className="footer-main">
           <p className="footer-title">Let’s make<br />something <em>work.</em></p>

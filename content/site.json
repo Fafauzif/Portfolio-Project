@@ -97,8 +97,12 @@
   ],
   "resume": "/portfolio-media/fauzi-fadhlurrohman-resume.pdf",
   "portrait": {
-    "src": "/portfolio-media/fauzi-profile-print.webp",
-    "alt": "Folded cobalt print with the initials FF in ivory serif type."
+    "src": "/portfolio-media/fauzi-about-portrait.webp",
+    "alt": "Fauzi Fadhlurrohman in a navy suit and striped tie, holding headphones around his neck.",
+    "width": 1254,
+    "height": 1254,
+    "treatment": "cutout",
+    "mirror": true
   },
   "heroProject": "g-consulting-mentee-recruitment",
   "labProject": "paper-current",

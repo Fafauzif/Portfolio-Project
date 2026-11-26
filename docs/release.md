@@ -16,11 +16,11 @@ Check Home, Work, every edited case, Lab, About, the résumé download, Contact,
 
 ## Vercel source ZIP
 
-Extract `Portfolio_Vercel_Source_v4.zip` over the existing repo. In Vercel, import that repo, select the **Next.js** preset, and use the directory containing `package.json` as the root. Leave **Output Directory** at its preset default. The existing `vercel.json` runs `npm run build`, and Next.js emits the static site to `out/`. Keep both `package.json` and `package-lock.json` with the source.
+Extract `Portfolio_Vercel_Source_v5.zip` over the existing repo. In Vercel, import that repo, select the **Next.js** preset, and use the directory containing `package.json` as the root. Leave **Output Directory** at its preset default. The existing `vercel.json` runs `npm run build`, and Next.js emits the static site to `out/`. Keep both `package.json` and `package-lock.json` with the source.
 
 ## Static ZIP
 
-Extract `Portfolio_Static_Export_v4.zip` to a static host's document root. `index.html` and `_next/` should sit directly there. Use directory index handling and `404.html` as the error page. To regenerate it, build, then archive the contents of `out/` at the ZIP root. Source docs and the inventory belong with the source package.
+Extract `Portfolio_Static_Export_v5.zip` to a static host's document root. `index.html` and `_next/` should sit directly there. Use directory index handling and `404.html` as the error page. To regenerate it, build, then archive the contents of `out/` at the ZIP root. Source docs and the inventory belong with the source package.
 
 ## Move from preview to a public domain
 

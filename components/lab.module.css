@@ -143,23 +143,6 @@
   overflow: hidden;
   isolation: isolate;
 }
-.deskMark {
-  display: grid;
-  position: absolute;
-  place-items: center;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 3.5rem;
-  height: 3.5rem;
-  border: 1px solid #5475ae;
-  border-radius: 50%;
-  color: #47669c;
-  font-family: var(--mono, monospace);
-  font-size: 1.55rem;
-  pointer-events: none;
-}
-
 .print {
   position: relative;
   width: 100%;

@@ -12,8 +12,9 @@ Navy supplies the dark sheet and some case openings. Pale paper supports long re
 | Compact navigation | On Home, the rail follows the fold from dark to light while keeping links legible. Interior links retain a stable position and clear focus. |
 | Archive | Search and filter complete case records. Quick View provides a closer look from the list. |
 | Case studies | Put title, the scope of work, and role where a reader can scan them. The linked work categories use the visual language of the small squared controls. |
-| Lab | Compare a keyboard-friendly print list with a draggable desk and an independent fold study. |
-| Pointer response | A small moving mark gives a sense of direction and rests out of sight. Light on artwork and modest control feedback respond to interaction. |
+| Lab | Compare projects in a keyboard-friendly list or move and inspect prints on the desk. |
+| Pointer response | A soft light sits under the fine pointer and fades at rest. Artwork and controls use light within their own boundaries. |
+| About portrait | Fauzi’s photo sits in front of overlapping paper stock. One cobalt corner connects the portrait to the opening fold. |
 | Artwork and links | A small settling movement emphasizes selected artwork. Link arrows give short directional feedback. Reading stays steady. |
 | Contact | The contact content fills the available page height before handing off to the footer. Longer content can flow beyond that height. |
 | Reduced motion | The question, project links, and essential content are available in their resting states. |

@@ -4,7 +4,7 @@ A static Next.js portfolio for campaigns, consulting, digital tools, proposals, 
 
 ## Use this package
 
-Extract `Portfolio_Vercel_Source_v4.zip` into the existing project directory and accept **Replace All**. `package.json`, `app/`, and `vercel.json` should be at the root. Earlier static `index.html` files may still be present in an existing checkout. The current site builds from `app/` and serves the export in `out/`.
+Extract `Portfolio_Vercel_Source_v5.zip` into the existing project directory and accept **Replace All**. `package.json`, `app/`, and `vercel.json` should be at the root. Earlier static `index.html` files may still be present in an existing checkout. The current site builds from `app/` and serves the export in `out/`.
 
 Use Node.js 22 or 24.
 

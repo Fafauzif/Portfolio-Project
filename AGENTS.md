@@ -18,6 +18,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 | Task | Start here | Check after editing |
 | --- | --- | --- |
 | Change name, initials, role, introduction, contact, photo, or links | `content/site.json` | Header, Home, About, Contact, résumé, and metadata. Store site media in `public/portfolio-media/`. |
+| Replace or reframe the About portrait | `content/site.json` → `portrait`; [About portrait](docs/maintenance.md#about-portrait) | Verify the actual dimensions, alt text, photo orientation, and how the crop looks on desktop and at 320–390 px. |
 | Change the hero words | `content/site.json` → `tagline` | `components/fold-hero.tsx` controls displayed breaks. Verify a full, readable question at 320 px, in landscape, and on desktop. |
 | Change the poster that unfolds | `content/site.json` → `heroProject`, then the matching project's `cover` and `previewCover` | Set that project's `featured` to `true`. Check the poster in the fold, landing cover, Work card, and full case. |
 | Add or revise a case | `docs/templates/README.md` and `content/projects/<slug>.md` | YAML `slug` matches the filename. Images and links resolve. The inventory entry matches the case. |

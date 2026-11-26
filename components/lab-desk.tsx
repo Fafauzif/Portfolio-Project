@@ -228,7 +228,6 @@ export default function LabDesk({ pieces }: { pieces: LabPiece[] }) {
       <div className={styles.workbenchModes} data-view={view ?? "auto"}>
         <div className={styles.deskView}>
           <div className={styles.desk} data-print-count={deskPieces.length} aria-label="Draggable project prints">
-            <span className={styles.deskMark} aria-hidden="true">+</span>
             {deskPieces.map((piece, index) => {
               const position = origin(piece.slug, index);
               const vars = {

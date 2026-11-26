@@ -5,7 +5,7 @@
 ## Replace visible personal details
 
 1. Edit `name`, `initials`, `role`, `intro`, `about`, `skills`, and `location` in `content/site.json`. `tagline` is the exact hero question. Check [UI maintenance](maintenance.md) if changing its length or line breaks.
-2. Put a cleared photo in `public/portfolio-media/`. Set `portrait.src` to its URL path, for example `/portfolio-media/fauzi-portrait.webp`, and set `portrait.alt` to a short, accurate description. Check the crop on About.
+2. Put an approved photo in `public/portfolio-media/`. Set `portrait.src` to its URL path, `portrait.alt` to a short description, and `portrait.width` and `portrait.height` to the actual pixel dimensions. For a square image with transparency, use `portrait.treatment: "cutout"` to add the paper composition. Set `portrait.mirror` to `true` if its orientation works better flipped. For a regular photograph, omit `treatment` and `mirror`. Check the framing on About at desktop and phone widths.
 3. Set `contact.email` to a public inbox and add `contact.linkedin` as a full HTTPS URL if approved. Check the copy control and mail link on Contact.
 4. Edit `experience` and `recognition` in the same file. `experience[].projects` is an array of case slugs. `recognition[].project` is an optional single case slug. The web résumé uses these data. Refresh the download by printing `/resume/` to PDF in the browser, putting the file in `public/portfolio-media/`, and updating `resume` if its filename changed.
 5. Add `testimonials` only for exact approved quotes with publishable attributions. Omitting the field hides the section.

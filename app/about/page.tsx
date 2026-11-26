@@ -36,7 +36,10 @@ export default function AboutPage() {
           </div>
         </header>
         {site.portrait && <figure className="portrait-area">
-          <div data-reveal-print><Image src={site.portrait.src} alt={site.portrait.alt} width={1200} height={900} priority /></div>
+          <div className="portrait-frame" data-treatment={site.portrait.treatment} data-mirror={site.portrait.mirror || undefined} data-reveal-print>
+            {site.portrait.treatment === 'cutout' && <span className="portrait-stock" aria-hidden="true" />}
+            <Image src={site.portrait.src} alt={site.portrait.alt} width={site.portrait.width ?? 1200} height={site.portrait.height ?? 900} priority />
+          </div>
           <figcaption>{site.location}</figcaption>
         </figure>}
         <div className="about-body">

@@ -56,24 +56,6 @@
   pointer-events: none;
 }
 
-.paperLight {
-  position: absolute;
-  z-index: 2;
-  inset: 0 auto auto 0;
-  width: clamp(18rem, 45vw, 50rem);
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgb(153 187 255 / .105), transparent 69%);
-  opacity: 0;
-  transform: translate3d(calc(var(--pointer-x, 0px) - 50%), calc(var(--pointer-y, 0px) - 50%), 0);
-  pointer-events: none;
-  transition: opacity 160ms ease;
-}
-
-@media (any-hover: hover) and (any-pointer: fine) and (prefers-reduced-motion: no-preference) {
-  .root:not([data-pointer-paused]) .stage[data-pointer-active] .paperLight { opacity: 1; }
-}
-
 .sheet {
   position: absolute;
   inset: 0;

@@ -78,7 +78,7 @@ export default function Home() {
         </div>
       </section>
 
-      {lab && <section className="lab-feature" aria-labelledby="home-lab-title">
+      {lab && <section className="lab-feature" aria-labelledby="home-lab-title" data-pointer-tone="navy">
         <div className="wrap lab-feature-grid">
           <div>
             <h2 id="home-lab-title">Things I made<br />to <em>find out.</em></h2>

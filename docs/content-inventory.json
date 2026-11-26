@@ -54,10 +54,10 @@
       "fields": [
         "portrait"
       ],
-      "status": "illustrative",
+      "status": "confirmed",
       "file": "content/site.json",
-      "asset": "public/portfolio-media/fauzi-profile-print.webp",
-      "notes": "The current image is an original print of the FF initials. Swap it for a cleared photo if desired and revise its alt text."
+      "asset": "public/portfolio-media/fauzi-about-portrait.webp",
+      "notes": "Approved by the portfolio owner for About. The site uses a transparent edit of the supplied photograph, mirrored by CSS within the paper layout. Keep incoming source photographs outside the deployment package."
     },
     {
       "fields": [

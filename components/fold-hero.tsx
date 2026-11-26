@@ -102,7 +102,6 @@ export default function FoldHero({
         scene.removeAttribute("data-fold-complete");
         scene.removeAttribute("data-fold-art-visible");
         scene.removeAttribute("data-fold-cta-passed");
-        scene.removeAttribute("data-pointer-paused");
         previousProgress = -1;
         settledAt = Infinity;
         return;
@@ -212,7 +211,6 @@ export default function FoldHero({
       scene.toggleAttribute("data-fold-complete", hasLanded);
       scene.toggleAttribute("data-fold-art-visible", p > 0.15);
       scene.toggleAttribute("data-fold-cta-passed", p >= 0.32);
-      scene.toggleAttribute("data-pointer-paused", p > 0);
       settledAt = hasLanded && p === 1 ? Math.max(flight.finish, start + track) : Infinity;
     }
 
@@ -262,10 +260,9 @@ export default function FoldHero({
 
   return (
     <section className={styles.root} ref={root} aria-labelledby="paper-headline" data-hero-root style={imageStyle}>
-      <div className={styles.stage} ref={stage} data-hero-stage data-pointer-zone="paper">
+      <div className={styles.stage} ref={stage} data-hero-stage>
         <div className={styles.backdrop} aria-hidden="true" />
         <div className={styles.castShadow} aria-hidden="true" />
-        <div className={styles.paperLight} aria-hidden="true" />
         <h1 className={styles.sheet} id="paper-headline" data-hero-sheet aria-label={[first, second].filter(Boolean).join(" ")}>
           <span className={`${styles.panel} ${styles.upper}`}>
             <span className={styles.ink}><span className={styles.line}>{first}</span></span>

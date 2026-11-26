@@ -103,7 +103,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
 
   return (
     <main className={styles.case} data-category={project.category} id="main-content" tabIndex={-1} style={accent}>
-      <header className={styles.head}>
+      <header className={styles.head} data-pointer-tone={build ? 'navy' : undefined}>
         <div className={styles.wrap}>
           <nav className={styles.trail} aria-label="Browse work">
             <a href="/work/" data-pointer-control>

@@ -73,12 +73,17 @@ The table flags hyphenated words as well. Judge deliberate hyphen breaks and tit
 ## Pointer, buttons, and Lab
 
 - `app/layout.tsx` mounts one shared `PointerEffects` controller. `components/pointer-effects.tsx` handles eligible pointer zones and sets local `--pointer-x` and `--pointer-y` values.
-- `components/pointer-effects.css` sets the size and intensity of the `cover`, `lab`, and `button` profiles. The Home `paper` profile uses these coordinates in `components/fold-hero.module.css`. Add `data-pointer-zone` to the intended surface. Use `data-pointer-control` for restrained press feedback.
-- The decorative `data-pointer-tracer` follows the fine pointer near the native cursor. It fades while idle and makes room for selecting text, typing, dialogs, keyboard, and dragging. Check ordinary movement outside a card, light feedback inside a card, then drag and click behavior. Touch and reduced motion have the same content and controls through static states.
+- `components/pointer-effects.css` sets the size and intensity of `data-pointer-light` and the local `cover`, `lab`, and `button` zones. The shared light is centered on the native pointer's click coordinates. Use its paper color by default and `data-pointer-tone="navy"` on dark surfaces. The hero chooses its tone from the fold progress. The nearest eligible local zone takes over while hovered. Use `data-pointer-control` for restrained press feedback.
+- The light fades on idle and clears for selection, typing, dialogs, keyboard input, and dragging. Check its center on a plain navy and paper area and near viewport edges, then check local light, dragging, and clicks. Touch and reduced motion have the same content and controls through static states.
 - Put `data-reveal-print` on a selected static artwork wrapper with a direct image child. The artwork is visible in rendered HTML. Its short movement runs once. `data-motion-link` opts an existing directional glyph into a small response on a real link. Test the first visit, reentry, no JavaScript, and reduced motion. Keep title and body text steady during reading.
 - Reusable buttons live in `components/ui/button.tsx`. Footer CTA layout is in `components/site-footer.tsx` and `app/globals.css`. Use an anchor with a real destination for navigation and a button for an action. Keep a visible focus outline and a comfortable touch target.
 - Work card arrows, Quick View, search, and category navigation live in `components/work-archive.tsx` and `components/work-archive.module.css`. Lab desk and list layout live in `components/lab-desk.tsx` and `components/lab.module.css`. The separate fold study lives in `components/lab-fold-study.tsx`.
 - The Lab desk keeps each print inside its own movement area across three, two, and one-column layouts. Check moving a print by touch, clicking or tapping its **Move** control, using the keyboard arrows with and without Shift, and resetting it. With JavaScript disabled the Lab should present the linked List and a static fold preview.
+- Add Lab entries through Markdown with `lab: true`. The site gives visitors controls for viewing projects and temporarily rearranging prints.
+
+## About portrait
+
+`content/site.json` sets `portrait.src`, `alt`, `width`, `height`, `treatment`, and `mirror`. `app/about/page.tsx` composes the portrait and `app/globals.css` styles `.portrait-frame` and `.portrait-stock`. Keep the cutout separate from the CSS paper layers so future portraits can be replaced without editing the backdrop. Review the face, hair, headphones, and both hands at 320 px, 390 px, and desktop. Read the [content guide](editing.md) for swapping to a regular photo.
 
 ## Diagnose a regression
 

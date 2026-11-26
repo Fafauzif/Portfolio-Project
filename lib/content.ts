@@ -49,7 +49,7 @@ export type SiteContent = {
   recognition: Recognition[];
   testimonials?: Testimonial[];
   resume?: string;
-  portrait?: { src: string; alt: string };
+  portrait?: { src: string; alt: string; width?: number; height?: number; treatment?: 'cutout'; mirror?: boolean };
   heroProject?: string;
   labProject?: string;
   url?: string;

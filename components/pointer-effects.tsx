@@ -4,21 +4,27 @@ import { useEffect, useRef } from "react";
 import "./pointer-effects.css";
 
 const supportedPointer = "(any-hover: hover) and (any-pointer: fine) and (prefers-reduced-motion: no-preference)";
-const zones = "[data-pointer-zone='paper'],[data-pointer-zone='cover'],[data-pointer-zone='lab'],[data-pointer-zone='button']";
+const zones = "[data-pointer-zone='cover'],[data-pointer-zone='lab'],[data-pointer-zone='button']";
 const quietTargets = "input, textarea, select, [contenteditable]:not([contenteditable='false']), dialog[open]";
-const traceIdleMs = 340;
+const lightIdleMs = 380;
 
-/** Moves the small ink ring and one opted-in surface while a fine pointer is moving. */
+function lightTone(target: Element) {
+  if (target.closest('[data-pointer-tone="navy"]')) return 'navy';
+  const hero = target.closest<HTMLElement>('[data-hero-stage]')?.closest<HTMLElement>('[data-hero-root]');
+  return hero && Number(hero.dataset.foldProgress ?? '0') < .42 ? 'navy' : 'paper';
+}
+
+/** Lights the surface at the native cursor's position while a fine pointer moves. */
 export function PointerEffects() {
-  const tracer = useRef<HTMLSpanElement>(null);
+  const surface = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
-    const mark = tracer.current;
-    if (!mark) return;
+    const light = surface.current;
+    if (!light) return;
 
     const media = window.matchMedia(supportedPointer);
     let zone: HTMLElement | null = null;
-    let pending: { element: HTMLElement | null; x: number; y: number } | null = null;
+    let pending: { target: Element; x: number; y: number } | null = null;
     let frame = 0;
     let idle = 0;
 
@@ -27,8 +33,8 @@ export function PointerEffects() {
       zone = null;
     }
 
-    function hideTracer() {
-      mark?.removeAttribute("data-pointer-live");
+    function hideLight() {
+      light?.removeAttribute("data-pointer-light-active");
     }
 
     function clear() {
@@ -36,32 +42,36 @@ export function PointerEffects() {
       frame = 0;
       pending = null;
       window.clearTimeout(idle);
-      hideTracer();
+      hideLight();
       clearZone();
     }
 
     function paint() {
       frame = 0;
-      if (!mark || !pending) return;
-      const { element, x, y } = pending;
+      if (!light || !pending) return;
+      const { target, x, y } = pending;
       pending = null;
-
-      const left = x + 27 < window.innerWidth ? x + 15 : Math.max(0, x - 22);
-      const top = y + 24 < window.innerHeight ? y + 11 : Math.max(0, y - 21);
-      mark.toggleAttribute("data-pointer-glide", mark.hasAttribute("data-pointer-live"));
-      mark.style.setProperty("--trace-x", `${left}px`);
-      mark.style.setProperty("--trace-y", `${top}px`);
-      mark.dataset.pointerLive = "true";
+      if (!target.isConnected) return;
+      const element = target.closest<HTMLElement>(zones);
+      const rect = element?.getBoundingClientRect();
       window.clearTimeout(idle);
-      idle = window.setTimeout(hideTracer, traceIdleMs);
 
-      if (!element?.isConnected || element.closest("[data-pointer-paused], [data-dragging='true']")) {
-        clearZone();
+      if (target.closest("[data-dragging='true']")) {
+        clear();
         return;
       }
 
-      const rect = element.getBoundingClientRect();
-      if (!rect.width || !rect.height) return;
+      idle = window.setTimeout(clear, lightIdleMs);
+      if (!element || !rect?.width || !rect.height) {
+        clearZone();
+        light.style.setProperty("--pointer-light-x", `${x}px`);
+        light.style.setProperty("--pointer-light-y", `${y}px`);
+        light.dataset.pointerTone = lightTone(target);
+        light.dataset.pointerLightActive = "true";
+        return;
+      }
+
+      hideLight();
       if (zone !== element) clearZone();
       element.style.setProperty("--pointer-x", `${(x - rect.left) * element.clientWidth / rect.width}px`);
       element.style.setProperty("--pointer-y", `${(y - rect.top) * element.clientHeight / rect.height}px`);
@@ -78,7 +88,7 @@ export function PointerEffects() {
         return;
       }
 
-      pending = { element: target.closest<HTMLElement>(zones), x: event.clientX, y: event.clientY };
+      pending = { target, x: event.clientX, y: event.clientY };
       if (!frame) frame = requestAnimationFrame(paint);
     }
 
@@ -160,5 +170,5 @@ export function PointerEffects() {
     };
   }, []);
 
-  return <span ref={tracer} aria-hidden="true" data-pointer-tracer />;
+  return <span ref={surface} aria-hidden="true" data-pointer-light />;
 }
