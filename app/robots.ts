@@ -6,6 +6,13 @@ export const dynamic = 'force-static';
 export default function robots(): MetadataRoute.Robots {
   const site = getSite();
   return site.preview === false
-    ? { rules: { userAgent: '*', allow: '/' }, sitemap: site.url ? new URL('/sitemap.xml', site.url).href : undefined }
+    ? {
+      rules: [
+        { userAgent: '*', allow: '/' },
+        { userAgent: 'OAI-SearchBot', allow: '/' },
+        ...(site.allowTrainingBots === true ? [] : [{ userAgent: 'GPTBot', disallow: '/' }]),
+      ],
+      sitemap: site.url ? new URL('/sitemap.xml', site.url).href : undefined,
+    }
     : { rules: { userAgent: '*', disallow: '/' } };
 }

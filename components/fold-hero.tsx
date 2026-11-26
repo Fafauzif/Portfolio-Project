@@ -5,12 +5,11 @@ import styles from "./fold-hero.module.css";
 
 type FoldHeroProps = {
   cover: string;
-  role: string;
   headline?: string;
   workHref?: string;
 };
 
-const defaultHeadline = "I don’t stop at the deck.";
+const defaultHeadline = "What happens after the deck?";
 const revealEnd = 0.76;
 const landingScale = 0.74;
 
@@ -24,8 +23,8 @@ function ramp(value: number, start = 0, finish = 1) {
 }
 
 function headlineLines(headline: string) {
-  const clean = headline.trim() || defaultHeadline;
-  const preferredBreak = clean.search(/\s+at\s+the\b/i);
+  const clean = headline.replace(/\s+/g, " ").trim() || defaultHeadline;
+  const preferredBreak = clean.search(/\s+(?:after|at)\s+the\b/i);
   if (preferredBreak > 0) {
     return [clean.slice(0, preferredBreak), clean.slice(preferredBreak).trim()];
   }
@@ -46,7 +45,6 @@ function measureLanding(landing: HTMLElement, height: number, scroll: number, st
 
 export default function FoldHero({
   cover,
-  role,
   headline = defaultHeadline,
   workHref = "#selected",
 }: FoldHeroProps) {
@@ -55,12 +53,10 @@ export default function FoldHero({
   const proxy = useRef<HTMLDivElement>(null);
   const proxyImage = useRef<HTMLImageElement>(null);
   const [first, second] = headlineLines(headline);
-  const firstWords = first.split(" ");
-  const leadWord = firstWords.pop();
-  const lead = firstWords.join(" ");
-  const secondWords = second.split(" ");
-  const emphatic = secondWords.pop();
-  const last = secondWords.join(" ");
+  const finalSpace = second.lastIndexOf(" ");
+  const last = finalSpace >= 0 ? second.slice(0, finalSpace) : "";
+  const emphatic = second.slice(finalSpace + 1);
+  const question = emphatic.endsWith("?");
 
   useEffect(() => {
     const scene = root.current;
@@ -87,6 +83,7 @@ export default function FoldHero({
     let frameWidth = 1;
     let frameHeight = 1;
     let restHeight = 1;
+    let settledAt = Infinity;
 
     function release() {
       if (!arrivalActive) return;
@@ -103,11 +100,11 @@ export default function FoldHero({
         scene.removeAttribute("data-fold-ready");
         scene.removeAttribute("data-fold-progress");
         scene.removeAttribute("data-fold-complete");
-        scene.removeAttribute("data-fold-dark-controls");
-        scene.removeAttribute("data-fold-unfolded");
         scene.removeAttribute("data-fold-art-visible");
-        scene.removeAttribute("data-fold-chrome-passed");
+        scene.removeAttribute("data-fold-cta-passed");
+        scene.removeAttribute("data-pointer-paused");
         previousProgress = -1;
+        settledAt = Infinity;
         return;
       }
 
@@ -157,7 +154,10 @@ export default function FoldHero({
         const scaleX = 1 + (to.width / width - 1) * phase;
         const scaleY = 1 + (to.height / height - 1) * phase;
         const drop = compact.matches ? phase ** 3 : phase;
-        carryPose = `translate3d(${x + (to.left - x) * phase}px,${y + (to.top - y) * drop}px,0) scale(${scaleX},${scaleY})`;
+        // Keep the print higher on phones while the section heading enters.
+        const arc = 4 * phase * (1 - phase);
+        const lift = compact.matches ? 0.18 * frameHeight * arc : 0;
+        carryPose = `translate3d(${x + (to.left - x) * phase}px,${y + (to.top - y) * drop - lift}px,0) scale(${scaleX},${scaleY})`;
 
         // Counter the frame's two-axis resize so the print keeps its proportions.
         if (imageSize) {
@@ -171,6 +171,12 @@ export default function FoldHero({
       }
 
       if (Math.abs(previousProgress - p) > 0.0001) {
+        const punctuation = ramp(p, 0, 0.052) * (1 - ramp(p, 0.11, 0.27));
+        const corner = ramp(p, 0.035, 0.13) * (1 - ramp(p, 0.28, 0.46));
+        scene.style.setProperty("--question-tip", `${9 * punctuation}deg`);
+        scene.style.setProperty("--question-lift", `${-0.052 * punctuation}em`);
+        scene.style.setProperty("--corner-lift", `${-8 * corner}px`);
+        scene.style.setProperty("--corner-turn", `${-10 * corner}deg`);
         scene.style.setProperty("--page-ink", ramp(p, 0.07, 0.42).toFixed(4));
         scene.style.setProperty("--fold-light", identify.toFixed(4));
         scene.style.setProperty("--top-fold", `${-23 * fold}deg`);
@@ -180,7 +186,6 @@ export default function FoldHero({
         scene.style.setProperty("--sheet-roll", `${-5 * fold}deg`);
         scene.style.setProperty("--sheet-scale", size.toFixed(4));
         scene.style.setProperty("--sheet-vertical-scale", (size * shorten).toFixed(4));
-        scene.style.setProperty("--fold-progress", p.toFixed(4));
         if (compact.matches && imageSize) {
           const aspect = imageSize.width / imageSize.height;
           const printWidth = Math.max(frameWidth, frameHeight * shorten * aspect);
@@ -205,14 +210,18 @@ export default function FoldHero({
       }
 
       scene.toggleAttribute("data-fold-complete", hasLanded);
-      scene.toggleAttribute("data-fold-dark-controls", p > 0.27);
       scene.toggleAttribute("data-fold-art-visible", p > 0.15);
-      scene.toggleAttribute("data-fold-unfolded", p >= revealEnd);
-      scene.toggleAttribute("data-fold-chrome-passed", scroll > start + track + frameHeight * 0.12);
+      scene.toggleAttribute("data-fold-cta-passed", p >= 0.32);
+      scene.toggleAttribute("data-pointer-paused", p > 0);
+      settledAt = hasLanded && p === 1 ? Math.max(flight.finish, start + track) : Infinity;
     }
 
     function schedule() {
       if (!disposed && !animationFrame) animationFrame = requestAnimationFrame(paint);
+    }
+
+    function onScroll() {
+      if (!motion.matches && canTurnPaper && window.scrollY < settledAt) schedule();
     }
 
     function remeasure() {
@@ -224,7 +233,7 @@ export default function FoldHero({
     observer?.observe(scene);
     observer?.observe(frame);
     if (landing) observer?.observe(landing);
-    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", remeasure, { passive: true });
     document.addEventListener("focusin", schedule);
     document.addEventListener("focusout", schedule);
@@ -239,7 +248,7 @@ export default function FoldHero({
       cancelAnimationFrame(animationFrame);
       release();
       observer?.disconnect();
-      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", remeasure);
       document.removeEventListener("focusin", schedule);
       document.removeEventListener("focusout", schedule);
@@ -253,28 +262,30 @@ export default function FoldHero({
 
   return (
     <section className={styles.root} ref={root} aria-labelledby="paper-headline" data-hero-root style={imageStyle}>
-      <div className={styles.stage} ref={stage} data-hero-stage>
+      <div className={styles.stage} ref={stage} data-hero-stage data-pointer-zone="paper">
         <div className={styles.backdrop} aria-hidden="true" />
         <div className={styles.castShadow} aria-hidden="true" />
+        <div className={styles.paperLight} aria-hidden="true" />
         <h1 className={styles.sheet} id="paper-headline" data-hero-sheet aria-label={[first, second].filter(Boolean).join(" ")}>
           <span className={`${styles.panel} ${styles.upper}`}>
-            <span className={styles.ink}><span className={styles.line}>{lead}{lead && " "}<span className={lead ? styles.leadWord : undefined}>{leadWord}</span></span></span>
+            <span className={styles.ink}><span className={styles.line}>{first}</span></span>
             <span className={styles.verso} aria-hidden="true"><span /></span>
           </span>{second && " "}
           <span className={`${styles.panel} ${styles.lower}`}>
             <span className={styles.ink}>
-              <span className={styles.line}>{last}{last && " "}<em>{emphatic}</em></span>
+              <span className={styles.line}>
+                {last}{last && " "}<em className={last ? styles.emphasisLine : undefined}>
+                  {question ? emphatic.slice(0, -1) : emphatic}
+                  {question && <span className={styles.question} data-hero-question>?</span>}
+                </em>
+              </span>
               <span className={styles.corner} aria-hidden="true" />
             </span>
             <span className={styles.verso} aria-hidden="true"><span /></span>
           </span>
         </h1>
-        <div className={styles.margin}>
-          <p className={styles.role}>{role}</p>
-          <div className={styles.actions}>
-            <a className={styles.workLink} href={workHref}>See selected work <span aria-hidden="true" /></a>
-            <p className={styles.scrollCue} aria-hidden="true" data-fold-scroll-cue>Scroll to unfold<span /></p>
-          </div>
+        <div className={styles.actions}>
+          <a className={styles.workLink} href={workHref} data-hero-cta>See selected work <span aria-hidden="true" /></a>
         </div>
       </div>
       <div className={styles.proxy} ref={proxy} data-hero-proxy aria-hidden="true">

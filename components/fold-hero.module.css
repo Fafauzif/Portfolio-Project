@@ -5,10 +5,10 @@
   --fold-accent: #b0c8ff;
   --fold-height: 100svh;
   --fold-track: clamp(490px, 83svh, 840px);
+  --hero-type-size: min(17.25vw, 28svh, 22rem);
   --crease: .507;
   --page-ink: 0;
   --fold-light: 0;
-  --fold-progress: 0;
   position: relative;
   min-block-size: var(--fold-height);
   background: var(--paper-front);
@@ -56,6 +56,24 @@
   pointer-events: none;
 }
 
+.paperLight {
+  position: absolute;
+  z-index: 2;
+  inset: 0 auto auto 0;
+  width: clamp(18rem, 45vw, 50rem);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgb(153 187 255 / .105), transparent 69%);
+  opacity: 0;
+  transform: translate3d(calc(var(--pointer-x, 0px) - 50%), calc(var(--pointer-y, 0px) - 50%), 0);
+  pointer-events: none;
+  transition: opacity 160ms ease;
+}
+
+@media (any-hover: hover) and (any-pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .root:not([data-pointer-paused]) .stage[data-pointer-active] .paperLight { opacity: 1; }
+}
+
 .sheet {
   position: absolute;
   inset: 0;
@@ -63,10 +81,10 @@
   padding: 0;
   margin: 0;
   font-family: var(--display, Georgia, serif);
-  font-size: clamp(4rem, min(20.7vw, 31.5svh), 24rem);
+  font-size: var(--hero-type-size);
   font-weight: 400;
   line-height: .84;
-  letter-spacing: -.083em;
+  letter-spacing: -.075em;
   transform-origin: center;
   transform-style: preserve-3d;
   transform:
@@ -158,12 +176,20 @@
   letter-spacing: -.1em;
 }
 
+.question {
+  display: inline-block;
+  transform-origin: .2em 83%;
+  transform: translateY(var(--question-lift, 0em)) rotate(var(--question-tip, 0deg));
+}
+
 .corner {
   position: absolute;
   inset: auto 0 0 auto;
   width: clamp(2.25rem, 6.1vw, 5.2rem);
   aspect-ratio: 1;
   clip-path: polygon(100% 0, 100% 100%, 0 100%);
+  transform-origin: 100% 100%;
+  transform: translateY(var(--corner-lift, 0px)) rotate(var(--corner-turn, 0deg));
   background: linear-gradient(135deg, #092153 15%, transparent 54%, #17389e 100%), var(--fold-art) 25% 42% / 500% auto #264ff5;
 }
 
@@ -252,41 +278,17 @@
   opacity: 0;
 }
 
-.margin {
+.actions {
   position: absolute;
   z-index: 5;
-  inset: clamp(6rem, 13svh, 9rem) clamp(1.2rem, 5vw, 5.2rem) clamp(1.15rem, 5.4svh, 3.7rem);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  inset-inline: clamp(1.2rem, 5vw, 5.2rem);
+  inset-block-end: clamp(1.15rem, 7svh, 4.2rem);
   pointer-events: none;
-}
-
-.role {
-  margin: 0;
-  align-self: start;
-  font-family: var(--mono, monospace);
-  font-size: clamp(.68rem, .9vw, .84rem);
-  line-height: 1.4;
-  letter-spacing: .082em;
-  text-transform: uppercase;
-  color: #c4d4f8;
-}
-
-.role,.scrollCue {
-  background-color: var(--paper-front);
-  box-shadow: 0 0 0 .22rem var(--paper-front);
-}
-
-.actions {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
 }
 
 .workLink {
   display: inline-flex;
+  max-inline-size: 100%;
   min-block-size: 3rem;
   align-items: center;
   justify-content: center;
@@ -298,13 +300,14 @@
   color: #101b35;
   font: 600 .93rem / 1.15 var(--sans, sans-serif);
   text-decoration: none;
-  white-space: nowrap;
   pointer-events: auto;
-  transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;
+  transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease,
+    opacity 130ms ease, transform 130ms ease, visibility 0s;
 }
 
 .workLink span {
   display: inline-grid;
+  flex: none;
   width: .82rem;
   height: .82rem;
   place-items: center;
@@ -335,94 +338,51 @@
   background: #f4f6ff;
 }
 
+.workLink:active {
+  background: #b0c8ff;
+}
+
 .workLink:focus-visible {
   outline: 2px solid #fff;
   outline-offset: 4px;
 }
 
-.scrollCue {
-  display: none;
-  align-items: center;
-  gap: .8rem;
-  margin: 0;
-  font-family: var(--mono, monospace);
-  font-size: .7rem;
-  letter-spacing: .09em;
-  line-height: 1;
-  text-transform: uppercase;
-  color: #c4d4f8;
-  white-space: nowrap;
+.root[data-fold-cta-passed] .workLink:not(:focus-visible) {
+  opacity: 0;
+  transform: translateY(.22rem);
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 130ms ease, transform 130ms ease, visibility 0s linear 130ms;
 }
 
-.root[data-fold-ready]:not([data-fold-unfolded]) .scrollCue {
-  display: flex;
-}
-
-.scrollCue span {
-  position: relative;
-  width: clamp(1.7rem, 5vw, 4rem);
-  height: 1px;
-  background: currentColor;
-  opacity: .6;
-}
-
-.scrollCue span::after {
-  position: absolute;
-  inset: 0;
-  content: "";
-  transform: scaleX(var(--fold-progress));
-  transform-origin: left;
-  background: currentColor;
-  height: 2px;
-  opacity: 1;
-}
-
-.root[data-fold-dark-controls] :is(.role, .scrollCue) {
-  color: #17284c;
-  background-color: var(--paper-back);
-  box-shadow: 0 0 0 .22rem var(--paper-back);
-}
-
-.root[data-fold-dark-controls] .workLink {
+.root[data-fold-cta-passed] .workLink:focus-visible {
   background: #101b35;
   border-color: #101b35;
   color: #f4f6ff;
-}
-
-.root[data-fold-dark-controls] .workLink:is(:hover,:focus-visible) {
-  background: #1d3db2;
-}
-
-.root[data-fold-dark-controls] .workLink:focus-visible {
-  outline-color: #101b35;
-}
-
-.root[data-fold-unfolded] .role,
-.root[data-fold-chrome-passed] .margin:not(:focus-within) {
-  visibility: hidden;
+  outline-color: #3151dd;
 }
 
 @media (max-width: 767px) {
   .root {
     --fold-track: clamp(280px, 54svh, 480px);
-    --crease: .51;
+    --hero-type-size: min(16.1vw, 15.5svh, 8.5rem);
+    --crease: .417;
   }
 
   .sheet {
-    font-size: clamp(3.65rem, min(22.5vw, 17svh), 10rem);
-    line-height: .81;
+    line-height: .88;
     letter-spacing: -.072em;
   }
 
   .line {
-    inline-size: calc(100% - 2.4rem);
+    inline-size: calc(100% - 2 * clamp(16px, 5.4vw, 32px));
+    max-inline-size: none;
     text-align: start;
   }
 
-  .leadWord {
+  .emphasisLine {
     display: block;
-    padding-inline-end: .3em;
-    text-align: end;
+    margin-block-start: .07em;
   }
 
   .corner {
@@ -433,18 +393,9 @@
     letter-spacing: -.083em;
   }
 
-  .margin {
-    inset: clamp(5.35rem, 12.8svh, 7rem) 1.18rem 1.65rem;
-  }
-
-  .role {
-    max-inline-size: 16rem;
-    font-size: .64rem;
-  }
-
-  .scrollCue {
-    gap: .5rem;
-    font-size: .58rem;
+  .actions {
+    inset-inline: clamp(16px, 5.4vw, 32px);
+    inset-block: max(calc(var(--crease) * 100% + 2.6 * var(--hero-type-size)), 58%) auto;
   }
 
   .workLink {
@@ -455,20 +406,13 @@
   }
 }
 
-@media (max-width: 360px) {
-  .scrollCue span {
-    display: none;
-  }
-
-  .margin {
-    inset-inline: 1rem;
-  }
-}
-
 @media (max-height: 480px) and (orientation: landscape) {
-  .margin {
-    inset-block-start: max(calc(var(--nav-height, 76px) + 10px), 19svh);
-    inset-block-end: .85rem;
+  .root {
+    --crease: .54;
+  }
+
+  .actions {
+    inset-block: auto .85rem;
   }
 
   .sheet {
@@ -479,9 +423,9 @@
     text-align: center;
   }
 
-  .leadWord {
+  .emphasisLine {
     display: inline;
-    padding-inline-end: 0;
+    margin-block-start: 0;
   }
 }
 
@@ -495,15 +439,16 @@
   }
 
   .sheet,
-  .panel {
+  .panel,
+  .question,
+  .corner {
     transform: none;
   }
 
   .backdrop,
   .castShadow,
   .proxy,
-  .scrollCue,
-  .root[data-fold-ready]:not([data-fold-unfolded]) .scrollCue {
+  .paperLight {
     display: none;
   }
 

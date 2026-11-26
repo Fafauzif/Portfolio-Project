@@ -1,0 +1,21 @@
+{
+  "experience": {
+    "title": "Program communications lead",
+    "organization": "Organization name",
+    "period": "Jan to Jun 2026",
+    "summary": "Describe the scope and one contribution you can verify.",
+    "projects": ["project-slug"]
+  },
+  "recognition": {
+    "title": "Award or distinction",
+    "organization": "Awarding organization",
+    "year": 2026,
+    "distinction": "Team recognition or individual result, as applicable",
+    "project": "project-slug"
+  },
+  "testimonial": {
+    "quote": "A quotation approved for public use.",
+    "author": "Approved public name",
+    "role": "Role and organization at the time of the quotation"
+  }
+}

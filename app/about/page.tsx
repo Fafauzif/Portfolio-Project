@@ -1,24 +1,40 @@
-import type { Metadata } from 'next';
 import Image from 'next/image';
 import { getSite } from '@/lib/content';
+import { withCanonical } from '@/lib/site-metadata';
 
-export const metadata: Metadata = { title: 'About' };
+export function generateMetadata() {
+  const site = getSite();
+  return withCanonical('/about/', { title: 'About', description: site.intro });
+}
 
 export default function AboutPage() {
   const site = getSite();
+  const profileUrl = site.preview === false && site.url ? new URL('/about/', site.url).href : undefined;
+  const schema = profileUrl ? {
+    '@context': 'https://schema.org',
+    '@type': 'ProfilePage',
+    url: profileUrl,
+    mainEntity: {
+      '@type': 'Person',
+      '@id': `${profileUrl}#person`,
+      name: site.name,
+      description: site.about[0],
+      url: profileUrl,
+    },
+  } : undefined;
   return (
     <main className="interior about-page" id="main-content" tabIndex={-1}>
-      <div className="about-layout wrap">
+      {schema && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema).replace(/</g, '\\u003c') }} />}
+      <div className="about-layout wrap" data-portrait={Boolean(site.portrait)}>
         <header className="interior-heading">
-          <p className="eyebrow">About</p>
-          <h1>{site.name}<em>.</em></h1>
+          <h1 id="person">{site.name}</h1>
           <p className="interior-lead">{site.role}</p>
           <a className="link-label" href="/resume/">View résumé <span className="diagonal" aria-hidden="true" /></a>
         </header>
-        <figure className="portrait-area">
-          {site.portrait && <Image src={site.portrait.src} alt={site.portrait.alt} width={1200} height={900} priority />}
+        {site.portrait && <figure className="portrait-area">
+          <Image src={site.portrait.src} alt={site.portrait.alt} width={1200} height={900} priority />
           <figcaption>{site.location}</figcaption>
-        </figure>
+        </figure>}
         <div className="about-body">
           {site.about.map((paragraph, index) => <p key={index}>{paragraph}</p>)}
         </div>

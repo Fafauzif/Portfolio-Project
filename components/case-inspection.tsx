@@ -31,7 +31,7 @@ export default function CaseInspection({ cover, imageAlt, transitionName }: { co
         <span>Artifact view</span>
         <div role="group" aria-label="Inspect artifact">
           {views.map((item, index) => (
-            <button key={item.label} type="button" aria-pressed={current === index}
+            <button key={item.label} type="button" data-pointer-control aria-pressed={current === index}
               onClick={() => setCurrent(index)}>
               {item.label}
             </button>

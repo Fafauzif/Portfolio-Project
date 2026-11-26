@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import { getProjects, getSite } from '@/lib/content';
 import SiteFooter from '@/components/site-footer';
 import SiteNav from '@/components/site-nav';
+import { PointerEffects } from '@/components/pointer-effects';
 import './globals.css';
 
 // A navigation can interrupt a native view transition before it is ready.
@@ -31,6 +32,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <a className="skip-link" href="#main-content">Skip to content</a>
         <noscript><style>{'.site-header{position:static;background:var(--navy);color:var(--paper)}.contact-copy,.copy-status{display:none}@media(max-width:480px){.nav-rail{display:grid;justify-content:stretch;gap:0;padding-block:5px}.nav-toggle{display:none!important}.nav-rail .primary-nav{display:flex;justify-content:space-between}}'}</style></noscript>
         <SiteNav name={site.name} initials={site.initials} />
+        <PointerEffects />
         {children}
         <SiteFooter site={site} />
       </body>

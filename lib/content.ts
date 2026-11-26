@@ -54,6 +54,8 @@ export type SiteContent = {
   labProject?: string;
   url?: string;
   preview?: boolean;
+  publishedProjects?: string[];
+  allowTrainingBots?: boolean;
 };
 
 const contentDir = path.join(process.cwd(), 'content');
@@ -104,17 +106,47 @@ function readProject(filename: string): Project {
 export function getProjects(): Project[] {
   if (projects && process.env.NODE_ENV === 'production') return projects;
   const directory = path.join(contentDir, 'projects');
-  projects = fs.readdirSync(directory)
+  const archive = fs.readdirSync(directory)
     .filter(name => name.endsWith('.md') && !name.startsWith('_'))
     .map(readProject)
     .sort((a, b) => b.year - a.year || a.title.localeCompare(b.title));
+  const profile = getSite();
+  if (profile.preview !== false) projects = archive;
+  else {
+    const approved = new Set(profile.publishedProjects);
+    const approvedCases = archive.filter(project => approved.has(project.slug));
+    if (approvedCases.length !== approved.size) {
+      throw new Error('Every slug in content/site.json publishedProjects must match a project file.');
+    }
+    projects = approvedCases;
+  }
   return projects;
 }
 
 export function getSite(): SiteContent {
   if (site && process.env.NODE_ENV === 'production') return site;
-  site = JSON.parse(fs.readFileSync(path.join(contentDir, 'site.json'), 'utf8')) as SiteContent;
+  const profile = JSON.parse(fs.readFileSync(path.join(contentDir, 'site.json'), 'utf8')) as SiteContent;
+  if (profile.preview === false) {
+    const url = profile.url && URL.canParse(profile.url) ? new URL(profile.url) : null;
+    if (!url || url.protocol !== 'https:' || url.username || url.password || url.pathname !== '/' || url.search || url.hash) {
+      throw new Error('Set content/site.json url to a public HTTPS origin before turning off preview.');
+    }
+    if (!Array.isArray(profile.publishedProjects) || !profile.publishedProjects.length) {
+      throw new Error('List approved case slugs in content/site.json publishedProjects before turning off preview.');
+    }
+  }
+  site = profile;
   return site;
+}
+
+export function getWorkCategories() {
+  const archive = getProjects();
+  return CATEGORIES.filter(category => archive.some(project => project.category === category.id));
+}
+
+export function getWorkListings() {
+  return getProjects().map(({ slug, title, summary, category, kind, year, role, client, cover, previewCover, imageAlt, tags, featured }) =>
+    ({ slug, title, summary, category, kind, year, role, client, cover, previewCover, imageAlt, tags, featured }));
 }
 
 export function categoryLabel(id: Category) {

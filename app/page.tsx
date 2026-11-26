@@ -1,16 +1,22 @@
 import FoldHero from '@/components/fold-hero';
 import { Button } from '@/components/ui/button';
 import { CATEGORIES, categoryLabel, getProjects, getSite, type Project } from '@/lib/content';
+import { withCanonical } from '@/lib/site-metadata';
 import type { CSSProperties } from 'react';
 import Image from 'next/image';
 
 function ProjectMedia({ project, landing }: { project: Project; landing?: boolean }) {
   const style = { '--cover-transition': 'case-' + project.slug } as CSSProperties;
   return (
-    <div className="home-cover" style={style} data-fold-landing={landing ? '' : undefined}>
-      <Image src={project.previewCover ?? project.cover} alt={project.imageAlt} width={1200} height={900} sizes="(max-width: 740px) 100vw, 55vw" />
+    <div className="home-cover" style={style} data-fold-landing={landing ? '' : undefined} data-pointer-zone={landing ? 'cover' : undefined}>
+      <Image src={project.previewCover ?? project.cover} alt={project.imageAlt} width={1200} height={900}
+        loading={landing ? 'eager' : 'lazy'} fetchPriority={landing ? 'high' : undefined} />
     </div>
   );
+}
+
+export function generateMetadata() {
+  return withCanonical('/');
 }
 
 export default function Home() {
@@ -23,11 +29,10 @@ export default function Home() {
 
   return (
     <main id="main-content" tabIndex={-1}>
-      <FoldHero role={site.role} cover={featuredLeading.previewCover ?? featuredLeading.cover} headline={site.tagline} workHref="#selected" />
+      <FoldHero cover={featuredLeading.previewCover ?? featuredLeading.cover} headline={site.tagline} workHref="#selected" />
 
       <section className="selected wrap" id="selected" aria-labelledby="selected-title">
         <div className="selected-head">
-          <p className="eyebrow">Portfolio</p>
           <h2 id="selected-title">Selected <em>work.</em></h2>
           <Button variant="outline" asChild><a href="/work/">Browse all projects <span className="diagonal" aria-hidden="true" /></a></Button>
         </div>
@@ -59,9 +64,9 @@ export default function Home() {
 
       <section className="directory" aria-labelledby="directory-title">
         <div className="wrap directory-layout">
-          <div><p className="eyebrow">Work index</p><h2 id="directory-title">Find the work<br />you came <em>for.</em></h2></div>
+          <h2 id="directory-title">Find the work<br />you came <em>for.</em></h2>
           <div className="directory-links">
-            {CATEGORIES.map(category => (
+            {CATEGORIES.filter(category => all.some(project => project.category === category.id)).map(category => (
               <a href={'/work/category/' + category.id + '/'} key={category.id}>
                 <div><h3>{category.label}</h3><p>{category.description}</p></div>
                 <span className="diagonal" aria-hidden="true" />
@@ -74,7 +79,6 @@ export default function Home() {
       {lab && <section className="lab-feature" aria-labelledby="home-lab-title">
         <div className="wrap lab-feature-grid">
           <div>
-            <p className="eyebrow">Lab</p>
             <h2 id="home-lab-title">Things I made<br />to <em>find out.</em></h2>
             <p>Small tools, moving studies, and prototypes that started with a question worth testing.</p>
             <a href="/lab/" className="link-label">Open the Lab <span className="diagonal" aria-hidden="true" /></a>
@@ -84,7 +88,6 @@ export default function Home() {
       </section>}
 
       <section className="home-about wrap" aria-labelledby="home-about-title">
-        <p className="eyebrow">About</p>
         <div>
           <h2 id="home-about-title">{site.name}</h2>
           <p>{site.intro}</p>

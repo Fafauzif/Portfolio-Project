@@ -10,7 +10,7 @@ client: "Relay Volunteer Network"
 cover: "/portfolio-media/relay-desk.webp"
 imageAlt: "Laptop displaying the Relay Desk schedule on a blue-gray worktable with notes."
 tags: ["Web app", "Workflow design", "Prototyping"]
-featured: true
+featured: false
 lab: false
 accent: "#9ecdb9"
 ---

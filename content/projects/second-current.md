@@ -10,7 +10,7 @@ client: "Material Futures Challenge"
 cover: "/portfolio-media/second-current.webp"
 imageAlt: "Layered corrugated event signage in cream, blue, and orange."
 tags: ["Business case", "Circular design", "Service design"]
-featured: true
+featured: false
 lab: false
 accent: "#e69773"
 ---

@@ -2,6 +2,7 @@
   --case-rule: color-mix(in srgb, currentColor 24%, transparent);
   color: var(--ink, #172340);
   background: var(--paper, #f5f4ef);
+  overflow-wrap: anywhere;
 }
 .wrap { width: min(88%, 82rem); margin-inline: auto; }
 .head { padding: clamp(7.2rem, 10vw, 9rem) 0 clamp(2rem, 6vw, 4.5rem); }

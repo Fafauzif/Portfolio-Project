@@ -17,7 +17,7 @@ export function ContactEmail({ email }: { email: string }) {
   return (
     <div className="contact-address">
       <a className="email-address" href={'mailto:' + email}>{email}</a>
-      <button className="contact-copy" type="button" onClick={copyEmail}>Copy email</button>
+      <button className="contact-copy" type="button" data-pointer-control onClick={copyEmail}>Copy email</button>
       <p className="copy-status" role="status">{status}</p>
     </div>
   );

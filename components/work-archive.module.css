@@ -99,8 +99,6 @@
 }
 
 .cover {
-  --preview-x: 0px;
-  --preview-y: 0px;
   display: block;
   position: relative;
   overflow: clip;
@@ -116,11 +114,11 @@
   height: 100%;
   object-fit: cover;
 }
-.cover img { transition: transform .4s cubic-bezier(.2,.7,.2,1); }
 .cover:focus-visible { outline: 2px solid var(--blue, #1935f4); outline-offset: 3px; }
 .cover::after { content: ""; position: absolute; inset: 0; border: 1px solid #111a2f22; pointer-events: none; }
 .coverArrow {
   position: absolute;
+  z-index: 2;
   right: .75rem;
   bottom: .75rem;
   display: grid;
@@ -134,10 +132,10 @@
   transition: background-color .2s, color .2s, transform .3s cubic-bezier(.2,.7,.2,1);
 }
 .cover:focus-visible .coverArrow { background: var(--ink, #172340); color: var(--paper, #f5f4ef); }
-@media (hover: hover) and (pointer: fine) {
-  .cover:hover img { transform: translate(var(--preview-x), var(--preview-y)) scale(1.045); }
+@media (any-hover: hover) and (any-pointer: fine) and (prefers-reduced-motion: no-preference) {
   .cover:hover .coverArrow { background: var(--ink, #172340); color: var(--paper, #f5f4ef); transform: translate(.12rem, -.12rem); }
 }
+.cover:active .coverArrow { background: var(--ink, #172340); color: var(--paper, #f5f4ef); }
 
 .cardCopy { min-width: 0; }
 .lead .cardCopy { max-width: 29rem; padding-bottom: .1rem; }
@@ -146,9 +144,14 @@
   font: 500 clamp(1.8rem, 3.3vw, 4.35rem)/.95 var(--display, Georgia, serif);
   letter-spacing: -.055em;
   margin: 0 0 .7rem;
+  overflow-wrap: anywhere;
   text-wrap: pretty;
 }
 .lead h2 { font-size: clamp(2.55rem, 5.5vw, 6rem); }
+.titleLink { text-underline-offset: .12em; text-decoration-thickness: .035em; }
+.titleLink:hover { text-decoration-line: underline; }
+.card:has(.titleLink:focus-visible) .coverArrow,
+.lead:has(.titleLink:focus-visible) .coverArrow { background: var(--ink, #172340); color: var(--paper, #f5f4ef); }
 .cardSummary { color: var(--muted); font: 400 .99rem/1.52 var(--sans, sans-serif); margin: 0; }
 .lead .cardSummary { font-size: 1.1rem; }
 .cardActions { min-height: 2.75rem; display: flex; gap: 1.2rem; flex-wrap: wrap; align-items: center; margin-top: .85rem; }

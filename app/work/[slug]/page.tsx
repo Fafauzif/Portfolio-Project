@@ -5,6 +5,7 @@ import CaseInspection from "@/components/case-inspection";
 import CaseSections from "@/components/case-sections";
 import WorkArrow from "@/components/work-arrow";
 import { CATEGORIES, getProjects } from "@/lib/content";
+import { withCanonical } from "@/lib/site-metadata";
 import styles from "@/components/case-study.module.css";
 
 type PageProps = {
@@ -42,7 +43,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { slug } = await params;
   const project = getProjects().find(item => item.slug === slug);
   if (!project) return {};
-  return {
+  return withCanonical(`/work/${project.slug}/`, {
     title: project.title,
     description: project.summary,
     openGraph: {
@@ -52,7 +53,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       images: [{ url: project.cover, alt: project.imageAlt }],
     },
     twitter: { card: "summary_large_image", title: project.title, description: project.summary, images: [{ url: project.cover, alt: project.imageAlt }] },
-  };
+  });
 }
 
 export default async function CaseStudyPage({ params }: PageProps) {

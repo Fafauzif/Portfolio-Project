@@ -5,11 +5,8 @@ export default function SiteFooter({ site }: { site: SiteContent }) {
     <footer className="site-footer">
       <div className="wrap">
         <div className="footer-main">
-          <div>
-            <p className="eyebrow">Contact</p>
-            <p className="footer-title">Let’s make<br />something <em>work.</em></p>
-          </div>
-          <a className="footer-contact" href="/contact/">Get in touch <span className="diagonal" aria-hidden="true" /></a>
+          <p className="footer-title">Let’s make<br />something <em>work.</em></p>
+          <a className="footer-contact" href="/contact/" data-pointer-zone="button">Get in touch <span className="diagonal" aria-hidden="true" /></a>
         </div>
         <div className="footer-base">
           <a href="/">{site.name}</a>

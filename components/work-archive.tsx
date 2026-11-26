@@ -1,6 +1,6 @@
 "use client";
 
-import { type PointerEvent, useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import WorkArrow from "./work-arrow";
 import styles from "./work-archive.module.css";
 
@@ -40,20 +40,10 @@ function normalize(value: string) {
   return value.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase();
 }
 
-function updateDirection(event: PointerEvent<HTMLAnchorElement>) {
-  if (event.pointerType !== "mouse") return;
-  const cover = event.currentTarget;
-  const rect = cover.getBoundingClientRect();
-  const dx = (event.clientX - rect.left) / rect.width - .5;
-  const dy = (event.clientY - rect.top) / rect.height - .5;
-  cover.style.setProperty("--preview-x", Math.abs(dx) > Math.abs(dy) ? (dx < 0 ? "-9px" : "9px") : "0px");
-  cover.style.setProperty("--preview-y", Math.abs(dy) >= Math.abs(dx) ? (dy < 0 ? "-9px" : "9px") : "0px");
-}
-
 function Cover({ project, eager = false }: { project: Listing; eager?: boolean }) {
   return (
-    <a className={styles.cover} href={caseHref(project.slug)}
-      aria-label={`Read case study for ${project.title}`} style={{ viewTransitionName: `case-${project.slug}` }} onPointerEnter={updateDirection}>
+    <a className={styles.cover} href={caseHref(project.slug)} tabIndex={-1} data-pointer-zone="cover"
+      aria-label={`Read case study for ${project.title}`} style={{ viewTransitionName: `case-${project.slug}` }}>
       <img src={project.previewCover ?? project.cover} alt="" width={1200} height={900} loading={eager ? "eager" : "lazy"}
         fetchPriority={eager ? "high" : undefined} decoding="async" />
       <span className={styles.coverArrow}><WorkArrow /></span>
@@ -73,10 +63,10 @@ function ProjectCard({ project, category, onPreview, lead = false, enhanced }: {
       <Cover project={project} eager={lead} />
       <div className={styles.cardCopy}>
         <p className={styles.cardMeta}><span>{category ?? project.kind}</span><span>{project.year}</span></p>
-        <h2>{project.title}</h2>
+        <h2><a className={styles.titleLink} href={caseHref(project.slug)}>{project.title}</a></h2>
         <p className={styles.cardSummary}>{project.summary}</p>
         <div className={styles.cardActions}>
-          {enhanced && <button type="button" className={styles.previewButton} onClick={event => onPreview(project, event.currentTarget)}
+          {enhanced && <button type="button" className={styles.previewButton} data-pointer-control onClick={event => onPreview(project, event.currentTarget)}
             aria-haspopup="dialog" aria-label={`Preview ${project.title}`}>Quick view<span aria-hidden="true">+</span></button>}
         </div>
       </div>
@@ -143,7 +133,7 @@ export default function WorkArchive({ projects, categories, initialCategory = "a
     <main className={styles.archive} id="main-content" tabIndex={-1}>
       <header className={styles.archiveHeader} data-filtered={!!currentCategory}>
         <div>
-          <p className={styles.eyebrow}><a href="/work/">Work archive</a>{currentCategory && <span aria-hidden="true"> / </span>}{currentCategory?.label}</p>
+          {currentCategory && <p className={styles.eyebrow}><a href="/work/">All work</a></p>}
           <h1>{currentCategory ? currentCategory.label : <>Work in <em>print.</em></>}</h1>
         </div>
         <div className={styles.intro}>
@@ -164,7 +154,7 @@ export default function WorkArchive({ projects, categories, initialCategory = "a
       <div className={styles.archiveBar}>
         <nav className={styles.filters} aria-label="Work categories">
           {[{ id: "all", label: "All work" }, ...categories].map(category => (
-            <a key={category.id} href={`${categoryHref(category.id)}${categorySuffix}`}
+            <a key={category.id} href={`${categoryHref(category.id)}${categorySuffix}`} data-pointer-control
               aria-current={category.id === initialCategory ? "page" : undefined}>
               {category.label}
             </a>

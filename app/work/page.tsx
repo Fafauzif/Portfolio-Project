@@ -1,13 +1,12 @@
-import type { Metadata } from "next";
 import WorkArchive from "@/components/work-archive";
-import { CATEGORIES, getProjects } from "@/lib/content";
+import { getWorkListings, getWorkCategories } from "@/lib/content";
+import { withCanonical } from "@/lib/site-metadata";
 
-export const metadata: Metadata = {
+export const generateMetadata = () => withCanonical('/work/', {
   title: "Work archive",
   description: "Browse campaigns, digital builds, proposals, writing, and speaking.",
-};
+});
 
 export default function WorkPage() {
-  const projects = getProjects().map(({ html: _html, ...project }) => project);
-  return <WorkArchive projects={projects} categories={CATEGORIES} />;
+  return <WorkArchive projects={getWorkListings()} categories={getWorkCategories()} />;
 }

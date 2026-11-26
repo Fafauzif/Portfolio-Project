@@ -1,0 +1,561 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Source-only editorial inventory for the portfolio owner and editing agents.",
+  "statuses": {
+    "confirmed": "Backed by the supplied record for this field. Review scope and permission before publication.",
+    "draft": "Working material to verify and clear. Use the beforeIndexing steps.",
+    "sample": "Example material used for layout and editing. Replace or omit from the public set.",
+    "illustrative": "Created for visual presentation. Never cite it as an original project artifact.",
+    "needsConfirmation": "Awaiting an approved asset or confirmation from the owner."
+  },
+  "publication": {
+    "file": "content/site.json",
+    "mode": "preview",
+    "pending": [
+      "Final HTTPS production origin",
+      "Owner-approved project slugs",
+      "Approved contact and other public identity details"
+    ]
+  },
+  "profile": [
+    {
+      "fields": [
+        "name",
+        "initials",
+        "role",
+        "location",
+        "intro",
+        "about",
+        "skills"
+      ],
+      "status": "confirmed",
+      "file": "content/site.json",
+      "notes": "Name and professional direction come from the supplied record. The short intro and profile summary are edited site copy."
+    },
+    {
+      "fields": [
+        "experience",
+        "recognition"
+      ],
+      "status": "draft",
+      "file": "content/site.json",
+      "notes": "Entries use supplied experience and recognition. Confirm current titles, dates, and the permissions for details before indexing."
+    },
+    {
+      "fields": [
+        "contact.email",
+        "contact.linkedin"
+      ],
+      "status": "needsConfirmation",
+      "file": "content/site.json",
+      "notes": "The .example email is a temporary address. Replace it with a public, checked inbox. Add a professional link only if approved."
+    },
+    {
+      "fields": [
+        "portrait"
+      ],
+      "status": "illustrative",
+      "file": "content/site.json",
+      "asset": "public/portfolio-media/fauzi-profile-print.webp",
+      "notes": "The current image is an original print of the FF initials. Swap it for a cleared photo if desired and revise its alt text."
+    },
+    {
+      "fields": [
+        "resume"
+      ],
+      "status": "draft",
+      "file": "content/site.json",
+      "asset": "public/portfolio-media/fauzi-fadhlurrohman-resume.pdf",
+      "notes": "Public-facing draft based on the supplied record. Re-export and replace the PDF after edits to facts or identity."
+    },
+    {
+      "fields": [
+        "testimonials"
+      ],
+      "status": "needsConfirmation",
+      "file": "content/site.json",
+      "notes": "The field is omitted. Use a quotation only with an approved public attribution."
+    }
+  ],
+  "projects": [
+    {
+      "slug": "a-room-for-questions",
+      "title": "A Room for Questions",
+      "file": "content/projects/a-room-for-questions.md",
+      "titleStatus": "sample",
+      "bodyStatus": "sample",
+      "mediaStatus": "illustrative",
+      "assets": [
+        "public/portfolio-media/a-room-for-questions.webp"
+      ],
+      "provenance": "Example case and artwork from the initial portfolio package.",
+      "beforeIndexing": [
+        "Replace this record with approved work or keep it out of publishedProjects."
+      ]
+    },
+    {
+      "slug": "algorithmic-justice",
+      "title": "Algorithmic Justice",
+      "file": "content/projects/algorithmic-justice.md",
+      "titleStatus": "confirmed",
+      "bodyStatus": "draft",
+      "mediaStatus": "illustrative",
+      "assets": [
+        "public/portfolio-media/algorithmic-justice.webp",
+        "public/portfolio-media/algorithmic-justice-preview.webp"
+      ],
+      "provenance": "User-supplied team proposal and event distinction record.",
+      "beforeIndexing": [
+        "Confirm which team role and event details may be stated.",
+        "Keep proposed policy effects separate from implemented or measured effects."
+      ]
+    },
+    {
+      "slug": "borrowed-light",
+      "title": "Borrowed Light",
+      "file": "content/projects/borrowed-light.md",
+      "titleStatus": "sample",
+      "bodyStatus": "sample",
+      "mediaStatus": "illustrative",
+      "assets": [
+        "public/portfolio-media/borrowed-light.webp"
+      ],
+      "provenance": "Example case and artwork from the initial portfolio package.",
+      "beforeIndexing": [
+        "Replace this record with approved work or keep it out of publishedProjects."
+      ]
+    },
+    {
+      "slug": "by-the-water",
+      "title": "By the Water",
+      "file": "content/projects/by-the-water.md",
+      "titleStatus": "sample",
+      "bodyStatus": "sample",
+      "mediaStatus": "illustrative",
+      "assets": [
+        "public/portfolio-media/by-the-water.webp"
+      ],
+      "provenance": "Example case and artwork from the initial portfolio package.",
+      "beforeIndexing": [
+        "Replace this record with approved work or keep it out of publishedProjects."
+      ]
+    },
+    {
+      "slug": "common-ground",
+      "title": "Common Ground",
+      "file": "content/projects/common-ground.md",
+      "titleStatus": "sample",
+      "bodyStatus": "sample",
+      "mediaStatus": "illustrative",
+      "assets": [
+        "public/portfolio-media/common-ground.webp",
+        "public/portfolio-media/common-ground-preview.webp",
+        "public/portfolio-media/common-ground-process.webp"
+      ],
+      "provenance": "Example case and artwork from the initial portfolio package.",
+      "beforeIndexing": [
+        "Replace this record with approved work or keep it out of publishedProjects."
+      ]
+    },
+    {
+      "slug": "footnotes-in-motion",
+      "title": "Footnotes in Motion",
+      "file": "content/projects/footnotes-in-motion.md",
+      "titleStatus": "sample",
+      "bodyStatus": "sample",
+      "mediaStatus": "illustrative",
+      "assets": [
+        "public/portfolio-media/footnotes-in-motion.webp"
+      ],
+      "provenance": "Example case and artwork from the initial portfolio package.",
+      "beforeIndexing": [
+        "Replace this record with approved work or keep it out of publishedProjects."
+      ]
+    },
+    {
+      "slug": "g-consulting-mentee-recruitment",
+      "title": "G-Consulting Mentee Recruitment",
+      "file": "content/projects/g-consulting-mentee-recruitment.md",
+      "titleStatus": "confirmed",
+      "bodyStatus": "draft",
+      "mediaStatus": "illustrative",
+      "assets": [
+        "public/portfolio-media/g-consulting-mentee-recruitment.webp",
+        "public/portfolio-media/g-consulting-mentee-recruitment-preview.webp"
+      ],
+      "provenance": "Recruitment campaign record and user-supplied performance summary.",
+      "beforeIndexing": [
+        "Confirm campaign dates, measurement language, and which applicant metrics can be published.",
+        "Replace or approve the editorial concept poster and its lighter preview. They are not campaign evidence."
+      ]
+    },
+    {
+      "slug": "gandeng-referral-workflow",
+      "title": "Gandeng Referral Workflow",
+      "file": "content/projects/gandeng-referral-workflow.md",
+      "titleStatus": "confirmed",
+      "bodyStatus": "draft",
+      "mediaStatus": "illustrative",
+      "assets": [
+        "public/portfolio-media/gandeng-referral-workflow.webp"
+      ],
+      "provenance": "User-supplied record of the Google Apps Script system and its usage.",
+      "beforeIndexing": [
+        "Confirm which workflow details and results can be shared.",
+        "Use synthetic or redacted examples for applicants, codes, account details, and internal sheets."
+      ]
+    },
+    {
+      "slug": "good-stock",
+      "title": "Good Stock",
+      "file": "content/projects/good-stock.md",
+      "titleStatus": "sample",
+      "bodyStatus": "sample",
+      "mediaStatus": "illustrative",
+      "assets": [
+        "public/portfolio-media/good-stock.webp"
+      ],
+      "provenance": "Example case and artwork from the initial portfolio package.",
+      "beforeIndexing": [
+        "Replace this record with approved work or keep it out of publishedProjects."
+      ]
+    },
+    {
+      "slug": "half-life",
+      "title": "Half Life",
+      "file": "content/projects/half-life.md",
+      "titleStatus": "sample",
+      "bodyStatus": "sample",
+      "mediaStatus": "illustrative",
+      "assets": [
+        "public/portfolio-media/half-life.webp"
+      ],
+      "provenance": "Example case and artwork from the initial portfolio package.",
+      "beforeIndexing": [
+        "Replace this record with approved work or keep it out of publishedProjects."
+      ]
+    },
+    {
+      "slug": "livin-momentum",
+      "title": "Livin’Momentum",
+      "file": "content/projects/livin-momentum.md",
+      "titleStatus": "confirmed",
+      "bodyStatus": "draft",
+      "mediaStatus": "illustrative",
+      "assets": [
+        "public/portfolio-media/livin-momentum.webp"
+      ],
+      "provenance": "User-supplied BILLIONS 2026 team proposal and placement record.",
+      "beforeIndexing": [
+        "Confirm individual workstream, event credit, and permissions for any organization imagery.",
+        "Keep forecasts and modeled values separate from measured banking outcomes."
+      ]
+    },
+    {
+      "slug": "margin-clip",
+      "title": "Margin Clip",
+      "file": "content/projects/margin-clip.md",
+      "titleStatus": "sample",
+      "bodyStatus": "sample",
+      "mediaStatus": "illustrative",
+      "assets": [
+        "public/portfolio-media/margin-clip.webp"
+      ],
+      "provenance": "Example case and artwork from the initial portfolio package.",
+      "beforeIndexing": [
+        "Replace this record with approved work or keep it out of publishedProjects."
+      ]
+    },
+    {
+      "slug": "mavenpro-puri-depok-mas",
+      "title": "MavenPRO × Puri Depok Mas",
+      "file": "content/projects/mavenpro-puri-depok-mas.md",
+      "titleStatus": "confirmed",
+      "bodyStatus": "draft",
+      "mediaStatus": "illustrative",
+      "assets": [
+        "public/portfolio-media/mavenpro-puri-depok-mas.webp",
+        "public/portfolio-media/mavenpro-puri-depok-mas-preview.webp"
+      ],
+      "provenance": "User-supplied property communications engagement and delivery record.",
+      "beforeIndexing": [
+        "Confirm client name, visual rights, and research detail for public use.",
+        "Keep delivered work separate from implementation and commercial results."
+      ]
+    },
+    {
+      "slug": "night-shift",
+      "title": "Night Shift",
+      "file": "content/projects/night-shift.md",
+      "titleStatus": "sample",
+      "bodyStatus": "sample",
+      "mediaStatus": "illustrative",
+      "assets": [
+        "public/portfolio-media/night-shift.webp"
+      ],
+      "provenance": "Example case and artwork from the initial portfolio package.",
+      "beforeIndexing": [
+        "Replace this record with approved work or keep it out of publishedProjects."
+      ]
+    },
+    {
+      "slug": "open-house",
+      "title": "Open House",
+      "file": "content/projects/open-house.md",
+      "titleStatus": "sample",
+      "bodyStatus": "sample",
+      "mediaStatus": "illustrative",
+      "assets": [
+        "public/portfolio-media/open-house.webp"
+      ],
+      "provenance": "Example case and artwork from the initial portfolio package.",
+      "beforeIndexing": [
+        "Replace this record with approved work or keep it out of publishedProjects."
+      ]
+    },
+    {
+      "slug": "overhead",
+      "title": "Overhead",
+      "file": "content/projects/overhead.md",
+      "titleStatus": "sample",
+      "bodyStatus": "sample",
+      "mediaStatus": "illustrative",
+      "assets": [
+        "public/portfolio-media/overhead.webp"
+      ],
+      "provenance": "Example case and artwork from the initial portfolio package.",
+      "beforeIndexing": [
+        "Replace this record with approved work or keep it out of publishedProjects."
+      ]
+    },
+    {
+      "slug": "paper-current",
+      "title": "Paper Current",
+      "file": "content/projects/paper-current.md",
+      "titleStatus": "sample",
+      "bodyStatus": "sample",
+      "mediaStatus": "illustrative",
+      "assets": [
+        "public/portfolio-media/paper-current.webp",
+        "public/portfolio-media/paper-current-detail.webp"
+      ],
+      "provenance": "Example case narrative with original portfolio artwork and a locally rendered Blender detail.",
+      "beforeIndexing": [
+        "Replace this record with approved work or keep it out of publishedProjects."
+      ]
+    },
+    {
+      "slug": "quiet-hours",
+      "title": "Quiet Hours",
+      "file": "content/projects/quiet-hours.md",
+      "titleStatus": "sample",
+      "bodyStatus": "sample",
+      "mediaStatus": "illustrative",
+      "assets": [
+        "public/portfolio-media/quiet-hours.webp"
+      ],
+      "provenance": "Example case and artwork from the initial portfolio package.",
+      "beforeIndexing": [
+        "Replace this record with approved work or keep it out of publishedProjects."
+      ]
+    },
+    {
+      "slug": "receipt-loop",
+      "title": "Receipt Loop",
+      "file": "content/projects/receipt-loop.md",
+      "titleStatus": "sample",
+      "bodyStatus": "sample",
+      "mediaStatus": "illustrative",
+      "assets": [
+        "public/portfolio-media/receipt-loop.webp"
+      ],
+      "provenance": "Example case and artwork from the initial portfolio package.",
+      "beforeIndexing": [
+        "Replace this record with approved work or keep it out of publishedProjects."
+      ]
+    },
+    {
+      "slug": "relay-desk",
+      "title": "Relay Desk",
+      "file": "content/projects/relay-desk.md",
+      "titleStatus": "sample",
+      "bodyStatus": "sample",
+      "mediaStatus": "illustrative",
+      "assets": [
+        "public/portfolio-media/relay-desk.webp",
+        "public/portfolio-media/relay-desk-process.webp"
+      ],
+      "provenance": "Example case and artwork from the initial portfolio package.",
+      "beforeIndexing": [
+        "Replace this record with approved work or keep it out of publishedProjects."
+      ]
+    },
+    {
+      "slug": "second-current",
+      "title": "Second Current",
+      "file": "content/projects/second-current.md",
+      "titleStatus": "sample",
+      "bodyStatus": "sample",
+      "mediaStatus": "illustrative",
+      "assets": [
+        "public/portfolio-media/second-current.webp",
+        "public/portfolio-media/second-current-process.webp"
+      ],
+      "provenance": "Example case and artwork from the initial portfolio package.",
+      "beforeIndexing": [
+        "Replace this record with approved work or keep it out of publishedProjects."
+      ]
+    },
+    {
+      "slug": "second-voice",
+      "title": "Second Voice",
+      "file": "content/projects/second-voice.md",
+      "titleStatus": "sample",
+      "bodyStatus": "sample",
+      "mediaStatus": "illustrative",
+      "assets": [
+        "public/portfolio-media/second-voice.webp"
+      ],
+      "provenance": "Example case and artwork from the initial portfolio package.",
+      "beforeIndexing": [
+        "Replace this record with approved work or keep it out of publishedProjects."
+      ]
+    },
+    {
+      "slug": "signal-room",
+      "title": "Signal Room",
+      "file": "content/projects/signal-room.md",
+      "titleStatus": "sample",
+      "bodyStatus": "sample",
+      "mediaStatus": "illustrative",
+      "assets": [
+        "public/portfolio-media/signal-room.webp"
+      ],
+      "provenance": "Example case and artwork from the initial portfolio package.",
+      "beforeIndexing": [
+        "Replace this record with approved work or keep it out of publishedProjects."
+      ]
+    },
+    {
+      "slug": "small-shifts",
+      "title": "Small Shifts",
+      "file": "content/projects/small-shifts.md",
+      "titleStatus": "sample",
+      "bodyStatus": "sample",
+      "mediaStatus": "illustrative",
+      "assets": [
+        "public/portfolio-media/small-shifts.webp"
+      ],
+      "provenance": "Example case and artwork from the initial portfolio package.",
+      "beforeIndexing": [
+        "Replace this record with approved work or keep it out of publishedProjects."
+      ]
+    },
+    {
+      "slug": "source-atlas",
+      "title": "Source Atlas",
+      "file": "content/projects/source-atlas.md",
+      "titleStatus": "sample",
+      "bodyStatus": "sample",
+      "mediaStatus": "illustrative",
+      "assets": [
+        "public/portfolio-media/source-atlas.webp"
+      ],
+      "provenance": "Example case and artwork from the initial portfolio package.",
+      "beforeIndexing": [
+        "Replace this record with approved work or keep it out of publishedProjects."
+      ]
+    },
+    {
+      "slug": "tedxuniversitasindonesia-2027",
+      "title": "TEDxUniversitasIndonesia 2027",
+      "file": "content/projects/tedxuniversitasindonesia-2027.md",
+      "titleStatus": "confirmed",
+      "bodyStatus": "draft",
+      "mediaStatus": "illustrative",
+      "assets": [
+        "public/portfolio-media/tedxuniversitasindonesia-2027.webp"
+      ],
+      "provenance": "User-supplied role and annual planning record.",
+      "beforeIndexing": [
+        "Confirm current role wording, dates, and approved public excerpts.",
+        "Keep the internal working plan out of the public files and distinguish proposals from launched programs."
+      ]
+    },
+    {
+      "slug": "transit-board",
+      "title": "Transit Board",
+      "file": "content/projects/transit-board.md",
+      "titleStatus": "sample",
+      "bodyStatus": "sample",
+      "mediaStatus": "illustrative",
+      "assets": [
+        "public/portfolio-media/transit-board.webp"
+      ],
+      "provenance": "Example case and artwork from the initial portfolio package.",
+      "beforeIndexing": [
+        "Replace this record with approved work or keep it out of publishedProjects."
+      ]
+    },
+    {
+      "slug": "transit-notes",
+      "title": "Transit Notes",
+      "file": "content/projects/transit-notes.md",
+      "titleStatus": "sample",
+      "bodyStatus": "sample",
+      "mediaStatus": "illustrative",
+      "assets": [
+        "public/portfolio-media/transit-notes.webp"
+      ],
+      "provenance": "Example case and artwork from the initial portfolio package.",
+      "beforeIndexing": [
+        "Replace this record with approved work or keep it out of publishedProjects."
+      ]
+    },
+    {
+      "slug": "typesetter",
+      "title": "Typesetter",
+      "file": "content/projects/typesetter.md",
+      "titleStatus": "sample",
+      "bodyStatus": "sample",
+      "mediaStatus": "illustrative",
+      "assets": [
+        "public/portfolio-media/typesetter.webp"
+      ],
+      "provenance": "Example case and artwork from the initial portfolio package.",
+      "beforeIndexing": [
+        "Replace this record with approved work or keep it out of publishedProjects."
+      ]
+    },
+    {
+      "slug": "what-sticks",
+      "title": "What Sticks",
+      "file": "content/projects/what-sticks.md",
+      "titleStatus": "sample",
+      "bodyStatus": "sample",
+      "mediaStatus": "illustrative",
+      "assets": [
+        "public/portfolio-media/what-sticks.webp"
+      ],
+      "provenance": "Example case and artwork from the initial portfolio package.",
+      "beforeIndexing": [
+        "Replace this record with approved work or keep it out of publishedProjects."
+      ]
+    },
+    {
+      "slug": "window-seat",
+      "title": "Window Seat",
+      "file": "content/projects/window-seat.md",
+      "titleStatus": "sample",
+      "bodyStatus": "sample",
+      "mediaStatus": "illustrative",
+      "assets": [
+        "public/portfolio-media/window-seat.webp"
+      ],
+      "provenance": "Example case and artwork from the initial portfolio package.",
+      "beforeIndexing": [
+        "Replace this record with approved work or keep it out of publishedProjects."
+      ]
+    }
+  ]
+}

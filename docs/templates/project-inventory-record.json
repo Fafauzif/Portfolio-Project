@@ -1,0 +1,11 @@
+{
+  "slug": "project-slug",
+  "title": "Confirmed project title",
+  "file": "content/projects/project-slug.md",
+  "titleStatus": "confirmed",
+  "bodyStatus": "draft",
+  "mediaStatus": "illustrative",
+  "assets": ["public/portfolio-media/project-slug.webp"],
+  "beforeIndexing": ["Confirm the body and clear or replace the cover."],
+  "provenance": "Brief description of the source, with contact details and private source files omitted."
+}

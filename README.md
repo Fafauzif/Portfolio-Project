@@ -1,39 +1,29 @@
-# Fieldwork portfolio
+# Fauzi Fadhlurrohman portfolio
 
-An editorial portfolio for strategy, campaigns, digital tools, proposals, and experiments. The opening headline folds into the first case study cover. The work archive contains 25 editable case studies, and the Lab adds a movable desk, close-up inspection, and a paper-folding study.
+A static Next.js portfolio for campaigns, consulting, digital tools, proposals, and experiments. The home print folds into the cover of G-Consulting Mentee Recruitment. Case studies use Markdown and profile data uses JSON.
 
-## Run locally
+## Use this package
 
-Use Node.js 22 or 24. Run these commands from the directory containing `package.json`.
+Extract `Portfolio_Vercel_Source_v3.zip` into the existing project directory and accept **Replace All**. `package.json`, `app/`, and `vercel.json` should be at the root. Earlier static `index.html` files may still be present in an existing checkout. The current site builds from `app/` and serves the export in `out/`.
+
+Use Node.js 22 or 24.
 
 ```sh
 npm ci
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000). To test the same static output used for deployment:
+Open [localhost:3000](http://localhost:3000). For a production preview, run `npm run build` and `npm run preview -- 4173`, then open [localhost:4173](http://localhost:4173).
 
-```sh
-npm run typecheck
-npm test
-npm run build
-npm run preview
-```
+## Edit or extend the portfolio
 
-`npm run preview -- 4173` uses a different port. The preview serves `out/` and uses the generated 404 page.
+| Need | Open |
+| --- | --- |
+| Give a coding agent instructions | [AGENTS.md](AGENTS.md) |
+| Replace text, projects, assets, or credentials | [Content guide](docs/editing.md) |
+| Identify review status and files still to replace | [Content inventory](docs/content-inventory.json) |
+| Start with a ready-to-copy structure | [Templates](docs/templates/README.md) |
+| Adjust the fold, pointer effects, buttons, or styling | [UI maintenance](docs/maintenance.md) |
+| Deploy, switch domains, enable indexing, or prepare a ZIP | [Release guide](docs/release.md) |
 
-## Update the existing repository
-
-Extract `Portfolio_Vercel_Source.zip` into the existing project directory. Accept **Replace All** when prompted. After extraction, `package.json`, `vercel.json`, and `app/` belong at the same level as the older `index.html`. The app routes and production build live under `app/` and `out/` respectively. Older static files can stay in the working directory during migration.
-
-## Deploy to Vercel
-
-Import the extracted source directory as a Git project or run the Vercel CLI from that directory. Keep the **Next.js** framework preset and the directory containing `package.json` as the project root. Leave **Output Directory** on its default setting. The included `vercel.json` runs `npm run build`, and the Next.js adapter discovers the static export in `out/`. Select Node.js 22 or 24 in the project settings. No secrets or external services are required for the included site.
-
-For a static host, extract `Portfolio_Static_Export.zip` so its `index.html` sits at the hosting root beside `_next/`. Configure directory indexes and use `404.html` for missing pages. Both archives are set up for hosting at the root of a domain or subdomain.
-
-## Replace the sample portfolio
-
-Start with [the content guide](docs/editing.md). It maps each visible section to the source file an editor or coding agent should change. The bundled identity, projects, client names, testimonials, recognitions, portrait, contact address, and résumé are sample material. `preview` in `content/site.json` defaults to `true`, which applies noindex metadata and blocks crawling in `robots.txt` until the real portfolio is ready.
-
-The source uses Next.js App Router, TypeScript, Tailwind CSS v4, shadcn-compatible primitives, Motion, CSS 3D transforms, and local Markdown and JSON. The exported site is static. The main motion, interaction, and layout decisions are recorded in [DESIGN.md](DESIGN.md).
+The site ships in preview mode pending the final domain and content approval. The editable stack is Next.js App Router, TypeScript, Tailwind CSS v4, and shadcn-compatible primitives. Interaction uses CSS transforms, browser APIs, and Motion for the Lab.

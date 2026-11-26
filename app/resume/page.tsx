@@ -1,8 +1,8 @@
-import type { Metadata } from 'next';
 import { Button } from '@/components/ui/button';
 import { getSite } from '@/lib/content';
+import { withCanonical } from '@/lib/site-metadata';
 
-export const metadata: Metadata = { title: 'Résumé' };
+export const generateMetadata = () => withCanonical('/resume/', { title: 'Résumé', description: `${getSite().name}’s experience, areas of practice, and selected recognition.` });
 
 export default function ResumePage() {
   const site = getSite();

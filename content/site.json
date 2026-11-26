@@ -1,138 +1,108 @@
 {
-  "name": "Mara Adair",
-  "initials": "MA",
-  "tagline": "I don’t stop at the deck.",
-  "role": "Strategy, research & digital builds",
-  "location": "Working remotely",
-  "resume": "/portfolio-media/mara-adair-resume.pdf",
-  "intro": "I make campaigns, research tools, and small digital systems that carry the work from the brief to the people using it.",
+  "name": "Fauzi Fadhlurrohman",
+  "initials": "FF",
+  "tagline": "What happens after the deck?",
+  "role": "Marketing strategy, research & workflow automation",
+  "location": "Indonesia",
+  "intro": "I run campaigns, research how people make decisions, and build small tools for the work that follows.",
   "about": [
-    "I’m Mara, a strategist and independent builder. I’m drawn to projects where a good research finding needs a second life as something people can use: an invitation, a workflow, a clear explanation, or a small piece of software.",
-    "My work spans civic campaigns, cultural programs, operations tools, and service proposals. I like sitting in on real handoffs, reading what people ask when they get stuck, and keeping the early versions around so the final decision has a record.",
-    "In the Lab I make browser experiments and 3D studies. They let me test ideas about movement, type, and material at a smaller scale than a client project."
+    "I study English at Universitas Indonesia. A lot of my work starts with people’s questions: why someone hesitates to apply, what a first-home buyer needs to know, or where a teammate loses time in a workflow.",
+    "I’ve led marketing across several teams, presented a communications strategy to a property client, and built a referral workflow in Google Apps Script. The useful part is often where a recommendation becomes something a team can try or run.",
+    "I also work on team cases in business and public policy. They give me a reason to compare my first idea with what the research and the constraints actually support."
   ],
   "skills": [
+    "Marketing strategy",
     "Audience research",
-    "Campaign strategy",
-    "Service design",
+    "Campaign measurement",
+    "Client presentations",
     "Editorial writing",
-    "Prototyping",
-    "Front-end development",
+    "Team leadership",
     "Workflow automation",
-    "3D art direction"
+    "Google Apps Script"
   ],
   "contact": {
-    "email": "mara@fieldwork.example"
+    "email": "fauzi@fieldwork.example"
   },
   "experience": [
     {
-      "title": "Campaign strategy lead",
-      "organization": "Civic Assembly Studio",
-      "period": "2025–2026",
-      "summary": "Mapped the first-visit journey for public programs, wrote campaign briefs, and worked with designers and hosts to keep the invitation useful through arrival.",
+      "title": "Director of Marketing",
+      "organization": "TEDxUniversitasIndonesia 2027",
+      "period": "2026 cycle",
+      "summary": "Wrote the annual marketing plan and coordinated Social Media, External Affairs, and Visual Design across the event program.",
       "projects": [
-        "common-ground"
+        "tedxuniversitasindonesia-2027"
       ]
     },
     {
-      "title": "Independent product designer and developer",
-      "organization": "Fieldwork Studio",
-      "period": "2024–2026",
-      "summary": "Built small tools for coordination and research, from a shift-swap app to a browser extension for keeping excerpts in context.",
-      "projects": [
-        "relay-desk",
-        "margin-clip",
-        "receipt-loop",
-        "typesetter",
-        "source-atlas",
-        "paper-current",
-        "half-life"
-      ]
-    },
-    {
-      "title": "Service research collaborator",
-      "organization": "Bramble Regional Transit",
+      "title": "Program Branding Manager",
+      "organization": "G-Consulting / Gandeng Foundation",
       "period": "2026",
-      "summary": "Worked with the service team on rider decisions during disruptions and prototyped a status board with a visible, useful offline state.",
+      "summary": "Directed recruitment communications and partner amplification. Built the referral workflow the team used during the campaign.",
       "projects": [
-        "transit-notes",
-        "transit-board"
+        "g-consulting-mentee-recruitment",
+        "gandeng-referral-workflow"
       ]
     },
     {
-      "title": "Campaign writer and facilitator",
-      "organization": "Passage Design School",
-      "period": "2024–2025",
-      "summary": "Helped first-time participants picture themselves in a studio workshop and designed a class format built around audience questions.",
+      "title": "Project Leader",
+      "organization": "MavenPRO × Puri Depok Mas",
+      "period": "May to July 2026",
+      "summary": "Led a five-person team from buyer research to a communications strategy and presented it to the client.",
       "projects": [
-        "open-house",
-        "a-room-for-questions"
+        "mavenpro-puri-depok-mas"
       ]
     },
     {
-      "title": "Editorial collaborator",
-      "organization": "Tin Roof Audio",
-      "period": "2026",
-      "summary": "Edited a documentary script for pacing and clarity, keeping narration and interview material distinct during the production handoff.",
-      "projects": [
-        "second-voice"
-      ]
+      "title": "Social Media Specialist",
+      "organization": "FutureBrandLeaders",
+      "period": "2025 to 2026",
+      "summary": "Managed two content pillars, wrote social copy, and produced monthly campaign reports.",
+      "projects": []
+    },
+    {
+      "title": "Event Summit Associate and MC",
+      "organization": "UI SDGs Summit",
+      "period": "2024",
+      "summary": "Coordinated with international speakers and hosted the Grand Summit, including panel transitions and audience segments.",
+      "projects": []
     }
   ],
   "recognition": [
     {
-      "title": "Jury commendation",
-      "organization": "Material Futures Challenge",
+      "title": "National 1st Place",
+      "organization": "BILLIONS Mini Case Competition, Universitas Brawijaya",
       "year": 2026,
-      "distinction": "Team proposal",
-      "project": "second-current"
-    },
-    {
-      "title": "Shortlisted",
-      "organization": "Open Carriage Design Sprint",
-      "year": 2026,
-      "distinction": "Team prototype",
-      "project": "window-seat"
-    },
-    {
-      "title": "Selected for public reading",
-      "organization": "Civic Futures Forum",
-      "year": 2026,
-      "distinction": "Team policy brief",
-      "project": "small-shifts"
-    },
-    {
-      "title": "Finalist",
-      "organization": "Room for Business Case Challenge",
-      "year": 2025,
       "distinction": "Team business case",
-      "project": "overhead"
+      "project": "livin-momentum"
     },
     {
-      "title": "Special mention",
-      "organization": "Brief Exchange Showcase",
+      "title": "Meritorious Proposal",
+      "organization": "Global Development Public Policy Youth Innovation Contest Finals",
+      "year": 2026,
+      "distinction": "Team policy proposal presented in China",
+      "project": "algorithmic-justice"
+    },
+    {
+      "title": "1st Place",
+      "organization": "Trisakti Marketing Crown",
+      "year": 2026,
+      "distinction": "Team business case: Aqua ReLoop+"
+    },
+    {
+      "title": "International Finalist",
+      "organization": "Padjadjaran English Competition",
       "year": 2024,
-      "distinction": "Team pitch",
-      "project": "signal-room"
+      "distinction": "Speech category"
     }
   ],
-  "testimonials": [
-    {
-      "quote": "Mara brought the campaign back to the question people were actually asking. We were still using that visitor map when the next program brief came around.",
-      "author": "Dara Bell",
-      "role": "Program lead, Civic Assembly Studio"
-    },
-    {
-      "quote": "The useful part was watching her test the swap that went wrong. The team finally had a simple way to tell who was still on the roster.",
-      "author": "Imogen Ames",
-      "role": "Coordinator, Relay Volunteer Network"
-    }
-  ],
+  "resume": "/portfolio-media/fauzi-fadhlurrohman-resume.pdf",
   "portrait": {
-    "src": "/portfolio-media/mara-portrait.webp",
-    "alt": "Portrait of Mara in a slate jacket against an architectural backdrop"
+    "src": "/portfolio-media/fauzi-profile-print.webp",
+    "alt": "Folded cobalt print with the initials FF in ivory serif type."
   },
-  "heroProject": "common-ground",
+  "heroProject": "g-consulting-mentee-recruitment",
   "labProject": "paper-current",
-  "preview": true
+  "preview": true,
+  "publishedProjects": [],
+  "allowTrainingBots": false
 }

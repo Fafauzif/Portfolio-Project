@@ -11,7 +11,7 @@ cover: "/portfolio-media/common-ground.webp"
 previewCover: "/portfolio-media/common-ground-preview.webp"
 imageAlt: "Cobalt Common Ground poster on a concrete plaza wall, with people gathering behind it."
 tags: ["Audience research", "Campaign strategy", "Community"]
-featured: true
+featured: false
 lab: false
 accent: "#93b4f1"
 ---

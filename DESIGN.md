@@ -1,23 +1,19 @@
-# Fieldwork design notes
+# Portfolio design notes
 
-The opening takes the headline literally as the ink on a paper surface. A single navy print occupies the viewport, with a glimpse of cobalt at its corner. Native scrolling bends it along its crease and reveals the Common Ground campaign photograph. The photograph settles into the selected case’s actual cover position. The compact navigation stays available during the fold and on long case pages.
+The home question is printed on a navy sheet. The first movement tips the question mark and raises the corner as the reader starts to scroll. The sheet folds and the campaign print on its reverse settles into the first project cover. The opening keeps the navigation, question, and working link to Selected Work. The link leaves with the opening instead of crossing the poster.
 
-Four categories describe the kind of work someone came to see. The full archive remains searchable across fields so work can still be discovered by terms such as Blender, extensions, campaigns, or user research. Selected Work gives first-time visitors three substantial cases. The Lab provides a separate place to examine smaller prototypes and experiments. Experience and recognition point back to concrete cases.
+The work archive separates campaigns, building, proposals, and editorial work through type and spacing. Selected Work gives the opening a concrete answer. The Lab lets visitors inspect prints and experiments separately from the case studies. Experience and recognition connect back to the records that support them.
 
-The artwork moves between printed photographs, browser interfaces, material studies, field notes, and event ephemera. Dark navy introduces the print and digital build cases. Paper supports reading and close inspection. Cobalt marks the fold, selected copy, and the archive index. Newsreader supplies the large display type, Inter Tight supplies copy, and Geist Mono carries labels and dates.
+Navy supplies the dark sheet and some case openings. Pale paper supports long reading and light blue emphasizes interaction. Newsreader carries the display type, Inter Tight carries copy, and Geist Mono supplies secondary facts. The same system applies to mobile and desktop while allowing the title breaks and print geometry to adapt.
 
-| Interaction | Implementation |
+| Interaction | Design intent |
 | --- | --- |
-| Full-screen print | Two physical CSS planes, native scroll geometry, reversible cover handoff |
-| Compact navigation | Responsive links at the top, a smaller fixed rail on scroll, mobile menu |
-| Archive | Search, shareable query/category, artifact-led cards, native quick-view panel |
-| Case studies | Linked document sections, image detail controls, next-case navigation, shared cover transitions where supported |
-| Lab desk | Drag and keyboard placement, stable list view, focus-managed image inspection |
-| Lab fold study | Adjustable physical angle and crease in CSS, with a Blender-rendered detail in Paper Current |
-| Reduced motion | One readable title and normal document flow. Native links and general content remain available without JavaScript |
+| Printed question and fold | A short response starts the native-scroll transition. The card lands once and can rewind. |
+| Compact navigation | Use less reading space after scrolling and keep controls easy to find. |
+| Archive | Search and filter complete case records. Quick View provides a closer look from the list. |
+| Case studies | Expose usable section links, asset evidence, and relevant projects. |
+| Lab | Compare a keyboard-friendly print list with a draggable desk and an independent fold study. |
+| Pointer response | Local light or press feedback follows the current surface. Meaning stays in visible controls. |
+| Reduced motion | The question, project links, and essential content are readable without the animation. |
 
-The archive, dossier pages, and Lab adapt the ideas behind tilt, inspection, draggable cards, compact navigation, and scroll composition into a consistent set of original components. Animation is concentrated on changes to the object or navigation state, while long reads retain a stable text column.
-
-Energy, rhythm, and motion are each 3 of 3 for the opening. The typesetting, blue edge, and gradually changing paper planes carry that intensity. Inside a case, spacing and movement quiet down so readers can compare the text and evidence at their own pace.
-
-The Paper Current detail was rendered in Blender 4.3.2 with Cycles on the CPU. To reproduce the separate Blender environment check from the source directory, run `blender -b --factory-startup --python-exit-code 1 --python tools/blender-verify.py`. The check creates and renders a cube, saves a project, and exports a GLB in a temporary directory. The live site serves the detail as WebP.
+The unified variations of hover-border lighting and local pointer following were informed by [Hover Border Gradient](https://ui.aceternity.com/components/hover-border-gradient) and [Following Pointer](https://ui.aceternity.com/components/following-pointer). Adjust the project implementation through the [maintenance guide](docs/maintenance.md).

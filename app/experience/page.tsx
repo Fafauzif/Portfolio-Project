@@ -1,15 +1,15 @@
-import type { Metadata } from 'next';
 import { InteriorHeader } from '@/components/interior-header';
 import { getProjects, getSite } from '@/lib/content';
+import { withCanonical } from '@/lib/site-metadata';
 
-export const metadata: Metadata = { title: 'Experience' };
+export const generateMetadata = () => withCanonical('/experience/', { title: 'Experience', description: 'Roles, responsibilities, and the work behind them.' });
 
 export default function ExperiencePage() {
   const { experience } = getSite();
   const projects = new Map(getProjects().map(project => [project.slug, project]));
   return (
     <main className="interior wrap" id="main-content" tabIndex={-1}>
-      <InteriorHeader eyebrow="Experience" lead="Roles, responsibilities, and the projects that came out of them.">Where I’ve <em>worked.</em></InteriorHeader>
+      <InteriorHeader>Where I’ve <em>worked.</em></InteriorHeader>
       <ol className="experience-ledger">
         {experience.map(entry => (
           <li key={entry.organization + entry.title}>

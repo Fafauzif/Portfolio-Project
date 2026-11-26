@@ -221,8 +221,8 @@ export default function LabDesk({ pieces }: { pieces: LabPiece[] }) {
           </p>
         </div>
         <div className={styles.tabs} role="group" aria-label="Workbench layout">
-          <button type="button" aria-pressed={currentView === "desk"} onClick={() => setView("desk")}>Desk</button>
-          <button type="button" aria-pressed={currentView === "list"} onClick={() => setView("list")}>List</button>
+          <button type="button" data-pointer-control aria-pressed={currentView === "desk"} onClick={() => setView("desk")}>Desk</button>
+          <button type="button" data-pointer-control aria-pressed={currentView === "list"} onClick={() => setView("list")}>List</button>
         </div>
       </div>
 
@@ -240,7 +240,7 @@ export default function LabDesk({ pieces }: { pieces: LabPiece[] }) {
               } as CSSProperties;
               return (
                 <article key={piece.slug} className={styles.print} style={vars} data-lab-piece={piece.slug}>
-                  <button type="button" className={styles.printImage} aria-label={`Inspect ${piece.title}`}
+                  <button type="button" className={styles.printImage} data-pointer-zone="lab" data-pointer-control aria-label={`Inspect ${piece.title}`}
                     onClick={(event) => inspect(piece, event.currentTarget)}>
                     {/* Local, pre-sized WebP covers also work when exported to static HTML. */}
                     {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -277,8 +277,8 @@ export default function LabDesk({ pieces }: { pieces: LabPiece[] }) {
         <ul className={styles.index}>
           {pieces.map((piece, index) => (
             <li key={piece.slug}>
-              <a href={`/work/${piece.slug}/`} className={styles.indexLink}>
-                <span className={styles.indexArt}>
+              <a href={`/work/${piece.slug}/`} className={styles.indexLink} data-pointer-control>
+                <span className={styles.indexArt} data-pointer-zone="lab">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={piece.cover} width="398" height="264" alt="" loading={index < deskPieces.length ? "eager" : "lazy"} />
                 </span>
