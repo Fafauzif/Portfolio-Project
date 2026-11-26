@@ -128,11 +128,11 @@
 
 .desk {
   position: relative;
-  container-type: size;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 8px;
   width: 100%;
-  height: clamp(29.25rem, 53vw, 44rem);
-  --card-width: clamp(8.7rem, 30cqw, 24.5rem);
-  --card-height: calc(var(--card-width) * .6667 + 3.15rem);
+  padding: clamp(5px, 1.5vw, 22px);
   background-color: #bdcff2;
   background-image:
     linear-gradient(90deg, #263f7c1d 1px, transparent 1px),
@@ -143,7 +143,6 @@
   overflow: hidden;
   isolation: isolate;
 }
-
 .deskMark {
   display: grid;
   position: absolute;
@@ -162,14 +161,9 @@
 }
 
 .print {
-  position: absolute;
-  left: 12px;
-  top: 12px;
-  width: var(--card-width);
-  z-index: var(--lab-level);
-  translate:
-    calc((100cqw - var(--card-width) - 24px) * var(--lab-x))
-    calc((100cqh - var(--card-height) - 24px) * var(--lab-y)) 0;
+  position: relative;
+  width: 100%;
+  translate: calc(var(--travel-x) * var(--lab-x)) calc(var(--travel-y) * var(--lab-y)) 0;
   transform: rotate(var(--lab-turn));
   color: var(--lab-navy);
   background: #fbfbf8;
@@ -178,8 +172,24 @@
   transform-origin: center;
 }
 
+.printSlot {
+  --guard: clamp(13px, 1.6vw, 24px);
+  --travel-x: clamp(19px, 3.75vw, 56px);
+  --travel-y: clamp(18px, 3.2vw, 42px);
+  grid-column: span 2;
+  min-width: 0;
+  padding: var(--guard);
+  padding-inline-end: calc(var(--guard) + var(--travel-x));
+  padding-block-end: calc(var(--guard) + var(--travel-y));
+}
+
+@media (min-width: 961px) {
+  .desk[data-print-count='5'] .printSlot:nth-of-type(4) { grid-column: 2 / span 2; }
+  .desk[data-print-count='5'] .printSlot:nth-of-type(5) { grid-column: 4 / span 2; }
+}
+
 .print:focus-within {
-  z-index: calc(var(--lab-level) + 2000);
+  z-index: 2;
 }
 
 .print[data-dragging="true"] {
@@ -219,7 +229,10 @@
 }
 
 .printCaption a {
-  min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  min-width: 24px;
+  min-height: 44px;
   color: var(--lab-navy);
   font: 550 clamp(.75rem, 1.35vw, .94rem)/1.15 var(--sans, system-ui, sans-serif);
   text-decoration: none;
@@ -697,8 +710,6 @@
   }
 
   .desk {
-    --card-width: min(clamp(7.5rem, 39cqw, 15rem), calc(100cqw - 24px));
-    height: clamp(31rem, 112vw, 47rem);
     background-size: 28px 28px;
   }
 
@@ -723,13 +734,18 @@
   }
 }
 
-@media (760px < width < 960px) {
+@media (max-width: 960px) {
   .desk {
-    --card-width: clamp(8.7rem, 28.5cqw, 24.5rem);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .printSlot { grid-column: auto; }
 }
 
 @media (max-width: 480px) {
+  .desk { grid-template-columns: minmax(0, 1fr); }
+  .print { transform: rotate(calc(var(--lab-turn) * .6)); }
+
   .tabs {
     flex-wrap: wrap;
     max-width: 100%;

@@ -42,7 +42,7 @@ function normalize(value: string) {
 
 function Cover({ project, eager = false }: { project: Listing; eager?: boolean }) {
   return (
-    <a className={styles.cover} href={caseHref(project.slug)} tabIndex={-1} data-pointer-zone="cover"
+    <a className={styles.cover} href={caseHref(project.slug)} tabIndex={-1} data-pointer-zone="cover" data-reveal-print
       aria-label={`Read case study for ${project.title}`} style={{ viewTransitionName: `case-${project.slug}` }}>
       <img src={project.previewCover ?? project.cover} alt="" width={1200} height={900} loading={eager ? "eager" : "lazy"}
         fetchPriority={eager ? "high" : undefined} decoding="async" />
@@ -51,9 +51,12 @@ function Cover({ project, eager = false }: { project: Listing; eager?: boolean }
   );
 }
 
-function ProjectCard({ project, category, onPreview, lead = false, enhanced }: {
+function titleHasWideWord(title: string) {
+  return title.split(/\s+/).some(word => Array.from(word).length > 17);
+}
+
+function ProjectCard({ project, onPreview, lead = false, enhanced }: {
   project: Listing;
-  category?: string;
   onPreview: (project: Listing, button: HTMLButtonElement) => void;
   lead?: boolean;
   enhanced: boolean;
@@ -62,8 +65,8 @@ function ProjectCard({ project, category, onPreview, lead = false, enhanced }: {
     <article className={lead ? styles.lead : styles.card}>
       <Cover project={project} eager={lead} />
       <div className={styles.cardCopy}>
-        <p className={styles.cardMeta}><span>{category ?? project.kind}</span><span>{project.year}</span></p>
-        <h2><a className={styles.titleLink} href={caseHref(project.slug)}>{project.title}</a></h2>
+        <h2 data-long-word={titleHasWideWord(project.title)}><a className={styles.titleLink} href={caseHref(project.slug)}>{project.title}</a></h2>
+        <p className={styles.cardMeta}><span>{project.kind}</span><time dateTime={String(project.year)}>{project.year}</time></p>
         <p className={styles.cardSummary}>{project.summary}</p>
         <div className={styles.cardActions}>
           {enhanced && <button type="button" className={styles.previewButton} data-pointer-control onClick={event => onPreview(project, event.currentTarget)}
@@ -132,8 +135,7 @@ export default function WorkArchive({ projects, categories, initialCategory = "a
   return (
     <main className={styles.archive} id="main-content" tabIndex={-1}>
       <header className={styles.archiveHeader} data-filtered={!!currentCategory}>
-        <div>
-          {currentCategory && <p className={styles.eyebrow}><a href="/work/">All work</a></p>}
+        <div className={styles.headingArea}>
           <h1>{currentCategory ? currentCategory.label : <>Work in <em>print.</em></>}</h1>
         </div>
         <div className={styles.intro}>
@@ -163,11 +165,11 @@ export default function WorkArchive({ projects, categories, initialCategory = "a
         <output className={styles.count} aria-live="polite">{visible.length} {visible.length === 1 ? "project" : "projects"}</output>
       </div>
 
-      {showLead && <ProjectCard project={visible[0]} category={labels.get(visible[0].category)} onPreview={showPreview} enhanced={enhanced} lead />}
+      {showLead && <ProjectCard project={visible[0]} onPreview={showPreview} enhanced={enhanced} lead />}
       {visible.length > Number(showLead) && (
         <div className={styles.grid}>
           {visible.slice(showLead ? 1 : 0).map(project => (
-            <ProjectCard key={project.slug} project={project} category={labels.get(project.category)} onPreview={showPreview} enhanced={enhanced} />
+            <ProjectCard key={project.slug} project={project} onPreview={showPreview} enhanced={enhanced} />
           ))}
         </div>
       )}
@@ -183,8 +185,8 @@ export default function WorkArchive({ projects, categories, initialCategory = "a
           <button type="button" className={styles.close} onClick={() => dialog.current?.close()} autoFocus>Close <span aria-hidden="true">×</span></button>
           <img src={preview.cover} alt={preview.imageAlt} width={1200} height={900} decoding="async" />
           <div className={styles.dialogCopy}>
-            <p className={styles.eyebrow}>{labels.get(preview.category)}<span aria-hidden="true"> / </span>{preview.year}</p>
-            <h2 id={previewTitleId}>{preview.title}</h2>
+            <h2 id={previewTitleId} data-long-word={titleHasWideWord(preview.title)}>{preview.title}</h2>
+            <p className={styles.cardMeta}><span>{preview.kind}</span><time dateTime={String(preview.year)}>{preview.year}</time></p>
             <p>{preview.summary}</p>
             <p className={styles.previewRole}><strong>Role</strong> {preview.role}</p>
             <a href={caseHref(preview.slug)} className={styles.dialogLink}>Read the full case <WorkArrow /></a>

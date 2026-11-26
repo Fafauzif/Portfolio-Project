@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { ProfileHeading } from '@/components/profile-heading';
 import { getSite } from '@/lib/content';
 import { withCanonical } from '@/lib/site-metadata';
 
@@ -27,12 +28,15 @@ export default function AboutPage() {
       {schema && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema).replace(/</g, '\\u003c') }} />}
       <div className="about-layout wrap" data-portrait={Boolean(site.portrait)}>
         <header className="interior-heading">
-          <h1 id="person">{site.name}</h1>
+          <ProfileHeading name={site.name} id="person" />
           <p className="interior-lead">{site.role}</p>
-          <a className="link-label" href="/resume/">View résumé <span className="diagonal" aria-hidden="true" /></a>
+          <div className="profile-actions">
+            <a className="link-label" href="/work/" data-motion-link>Explore work <span className="diagonal" aria-hidden="true" /></a>
+            <a className="link-label" href="/resume/" data-motion-link>View résumé <span className="diagonal" aria-hidden="true" /></a>
+          </div>
         </header>
         {site.portrait && <figure className="portrait-area">
-          <Image src={site.portrait.src} alt={site.portrait.alt} width={1200} height={900} priority />
+          <div data-reveal-print><Image src={site.portrait.src} alt={site.portrait.alt} width={1200} height={900} priority /></div>
           <figcaption>{site.location}</figcaption>
         </figure>}
         <div className="about-body">

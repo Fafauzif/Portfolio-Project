@@ -30,7 +30,15 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <head><script dangerouslySetInnerHTML={{ __html: routeTransitionGuard }} /></head>
       <body id="top">
         <a className="skip-link" href="#main-content">Skip to content</a>
-        <noscript><style>{'.site-header{position:static;background:var(--navy);color:var(--paper)}.contact-copy,.copy-status{display:none}@media(max-width:480px){.nav-rail{display:grid;justify-content:stretch;gap:0;padding-block:5px}.nav-toggle{display:none!important}.nav-rail .primary-nav{display:flex;justify-content:space-between}}'}</style></noscript>
+        <noscript><style>{`
+          .site-header { position: static; background: var(--navy); color: var(--paper); }
+          .contact-copy,.copy-status { display: none; }
+          @container siteNavigation (max-width: 27.5rem) {
+            .nav-rail { display: grid; justify-content: stretch; gap: 0; padding-block: 5px; }
+            .nav-toggle { display: none !important; }
+            .nav-rail .primary-nav { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0 10px; }
+          }
+        `}</style></noscript>
         <SiteNav name={site.name} initials={site.initials} />
         <PointerEffects />
         {children}

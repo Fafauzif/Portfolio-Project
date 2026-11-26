@@ -15,11 +15,12 @@ export default function LabFoldStudy() {
 
   return (
     <section className={styles.study} aria-labelledby="fold-study-title">
+      <noscript><style>{`.${styles.study} [data-fold-interaction]{display:none}`}</style></noscript>
       <div className={styles.studyCopy}>
         <p className={styles.kicker}>Spatial study</p>
         <h2 id="fold-study-title">Where the paper bends</h2>
-        <p>One cut sheet, two creases. Change the angle and see when the lines stop reading as one image.</p>
-        <button type="button" aria-expanded={expanded} aria-controls="fold-study-controls" onClick={() => setExpanded((current) => !current)}>
+        <p>One cut sheet, two creases.<span data-fold-interaction> Change the angle and see when the lines stop reading as one image.</span></p>
+        <button type="button" data-fold-interaction aria-expanded={expanded} aria-controls="fold-study-controls" onClick={() => setExpanded((current) => !current)}>
           {expanded ? "Hide controls" : "Open fold controls"} <span aria-hidden="true">{expanded ? "−" : "+"}</span>
         </button>
 

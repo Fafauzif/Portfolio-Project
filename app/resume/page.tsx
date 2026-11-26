@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button';
+import { ProfileHeading } from '@/components/profile-heading';
 import { getSite } from '@/lib/content';
 import { withCanonical } from '@/lib/site-metadata';
 
@@ -12,7 +13,7 @@ export default function ResumePage() {
         {site.resume && <Button asChild><a href={site.resume} download>Download PDF <span className="diagonal" aria-hidden="true" /></a></Button>}
       </div>
       <article className="resume-document">
-        <header><h1>{site.name}</h1><p>{site.role}</p><span>{site.location}</span></header>
+        <header><ProfileHeading name={site.name} /><p>{site.role}</p><span>{site.location}</span></header>
         <p className="resume-profile">{site.intro}</p>
         <section aria-labelledby="res-exp">
           <h2 id="res-exp">Experience</h2>

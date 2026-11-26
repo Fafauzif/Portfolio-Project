@@ -12,6 +12,36 @@ type PageProps = {
   params: Promise<{ slug: string }>;
 };
 
+function estimateTitleWordWidth(word: string) {
+  return Array.from(word).reduce((width, character) => {
+    if (/[MWmw@]/u.test(character)) return width + .96;
+    if (/[fiIjlt1]/u.test(character)) return width + .34;
+    if (/[r’'.:\-]/u.test(character)) return width + .42;
+    if (/[a-z0-9]/u.test(character)) return width + .6;
+    return width + .8;
+  }, 0);
+}
+
+function CaseTitle({ title }: { title: string }) {
+  const [first, ...partners] = title.split(" × ");
+  const words = title.split(/\s+/).filter(word => word !== "×");
+  const longestWidth = Math.max(
+    1,
+    ...words.map(estimateTitleWordWidth),
+    ...partners.map(partner => estimateTitleWordWidth(partner.split(/\s+/, 1)[0]) + .8),
+  );
+  const longWord = words.some(word => Array.from(word).length > 17);
+  const fit = { "--title-fit": `${100 / longestWidth}cqi` } as CSSProperties;
+
+  return (
+    <h1 className={styles.title} data-long-title={title.length > 22} data-long-word={longWord} style={fit}>
+      {first}{partners.map((partner, index) => (
+        <span className={styles.titlePartner} key={index}>{" "}<span className={styles.join}>×</span>{" "}{partner}</span>
+      ))}
+    </h1>
+  );
+}
+
 function prepareCaseBody(html: string) {
   const headings: { id: string; title: string }[] = [];
   const seen = new Set<string>();
@@ -75,23 +105,30 @@ export default async function CaseStudyPage({ params }: PageProps) {
     <main className={styles.case} data-category={project.category} id="main-content" tabIndex={-1} style={accent}>
       <header className={styles.head}>
         <div className={styles.wrap}>
-          <nav className={styles.trail} aria-label="Case study breadcrumbs">
-            <a href="/work/">Work</a>
-            <span aria-hidden="true">/</span>
-            <a href={`/work/category/${project.category}/`}>{category?.label}</a>
+          <nav className={styles.trail} aria-label="Browse work">
+            <a href="/work/" data-pointer-control>
+              <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
+                <path d="M13 8H3m0 0 4-4M3 8l4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="square" />
+              </svg>
+              All work
+            </a>
+            {category && <a href={`/work/category/${category.id}/`} data-pointer-control>{category.label}</a>}
           </nav>
           <div className={styles.intro}>
-            <div>
-              <p className={styles.kind}>{project.kind} <span aria-hidden="true">/</span> {project.year}</p>
-              <h1>{project.title}</h1>
+            <div className={styles.titleArea}><CaseTitle title={project.title} /></div>
+            <div className={styles.lead}>
+              <p className={styles.summary}>{project.summary}</p>
+              <dl className={styles.projectFacts}>
+                <div><dt>Role</dt><dd>{project.role}</dd></div>
+                <div><dt>Project type</dt><dd>{project.kind}</dd></div>
+                <div><dt>Year</dt><dd><time dateTime={String(project.year)}>{project.year}</time></dd></div>
+              </dl>
             </div>
-            <p className={styles.summary}>{project.summary}</p>
           </div>
           {build ? <div className={styles.heroImage}><CaseInspection cover={project.cover} imageAlt={project.imageAlt} transitionName={transitionName} /></div> :
             <figure className={styles.heroImage}>
-              <div data-case-cover style={{ viewTransitionName: transitionName }}><img src={project.cover} alt={project.imageAlt} width={1200} height={900}
+              <div data-case-cover data-reveal-print style={{ viewTransitionName: transitionName }}><img src={project.cover} alt={project.imageAlt} width={1200} height={900}
                 fetchPriority="high" decoding="async" /></div>
-              <figcaption>{project.title} <span aria-hidden="true">/</span> {project.client}</figcaption>
             </figure>}
         </div>
       </header>
@@ -100,7 +137,6 @@ export default async function CaseStudyPage({ params }: PageProps) {
         <aside className={styles.margins} aria-label="Case study details">
           <div className={styles.marginContent}>
             <dl className={styles.facts}>
-              <div><dt>Role</dt><dd>{project.role}</dd></div>
               <div><dt>Context</dt><dd>{project.client}</dd></div>
               {!!project.tags.length && <div><dt>Scope</dt><dd>{project.tags.join(", ")}</dd></div>}
             </dl>
@@ -122,8 +158,8 @@ export default async function CaseStudyPage({ params }: PageProps) {
             {related.map(other => (
               <a href={`/work/${other.slug}/`} key={other.slug} className={styles.relatedLink}>
                 <img src={other.cover} alt="" width={1200} height={900} loading="lazy" decoding="async" />
-                <p>{other.kind} <span aria-hidden="true">/</span> {other.year}</p>
                 <h3>{other.title}</h3>
+                <p>{other.kind} <time dateTime={String(other.year)}>{other.year}</time></p>
               </a>
             ))}
           </div>

@@ -6,7 +6,7 @@ export default function SiteFooter({ site }: { site: SiteContent }) {
       <div className="wrap">
         <div className="footer-main">
           <p className="footer-title">Let’s make<br />something <em>work.</em></p>
-          <a className="footer-contact" href="/contact/" data-pointer-zone="button">Get in touch <span className="diagonal" aria-hidden="true" /></a>
+          <a className="footer-contact" href="/contact/" data-pointer-zone="button" data-motion-link>Get in touch <span className="diagonal" aria-hidden="true" /></a>
         </div>
         <div className="footer-base">
           <a href="/">{site.name}</a>

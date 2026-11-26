@@ -26,6 +26,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 | Add Lab work or a detail view | Project Markdown → `lab`, `inspectCover`, `inspectAlt`; `content/site.json` → `labProject` | Check Desk, List, inspection, keyboard controls, and the Home Lab feature. |
 | Change Experience or Recognition | `content/site.json`; templates in `docs/templates/` | Check project slugs, organizations, dates, and individual vs. team attribution. The web résumé also reads this data. |
 | Replace the PDF résumé | `content/site.json` → `resume`; PDF in `public/portfolio-media/` | Keep the HTML résumé, downloadable PDF, and profile in sync. |
+| Fix a split name, cramped title, or clipped project card | `docs/maintenance.md` → Typography and reflow | Inspect the real text in its actual column. Check the longest name or title through normal widths and 200% text growth. |
 | Change buttons, motion, pointer behavior, or styling | `docs/maintenance.md` | Verify touch, keyboard focus, reduced motion, and the no-JavaScript path for essential links. |
 | Set the domain, edit search metadata, or prepare an export | `docs/release.md` | Verify deployment mode, approved cases, canonical URLs, robots directives, and sitemap. |
 
@@ -36,6 +37,12 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - Keep `output: 'export'` and the project root fixed for Vercel. Every content route must build statically. Keep text and links usable without JavaScript.
 - Preserve one accessible hero `h1`, one native link to `#selected`, one `[data-fold-landing]` target, and normal document scrolling. Keep the system cursor and ensure pointer effects never intercept a link, keyboard focus, or drag.
 
+## Typography rules for future edits
+
+- Preserve the full spelling and reading order in the content and HTML. Put deliberate visual grouping in the component. Give whole names and named entities room before using emergency wrapping for truly unbroken text.
+- Let columns and cards shrink within the page, then fit display type to the usable column. Check the contents as well as the document width. A viewport can scroll normally while a local grid cuts off the right edge or a heading strands one letter.
+- Recheck the full render at the widths around a changed breakpoint, even when a smaller phone and a wider desktop both look correct. See the named regression examples and the text-range check in [the maintenance guide](docs/maintenance.md#typography-and-reflow).
+
 ## Verify changes
 
 ```sh
@@ -45,4 +52,4 @@ npm run build
 npm run preview -- 4173
 ```
 
-Use `http://localhost:4173` to check the exported pages. For hero edits, test a fresh visit, scrolling in both directions, opening `/#selected` directly, and using the CTA from the keyboard. Check at 320, 390, 768, and 1440 px, plus a short landscape viewport. Read any test failure before editing the corresponding source file.
+Use `http://localhost:4173` to check the exported pages. For hero edits, test a fresh visit, scrolling in both directions, opening `/#selected` directly, and using the CTA from the keyboard. Run the relevant viewport and text-growth cases in [the release review](docs/review.md). Read any test failure before editing the corresponding source file.

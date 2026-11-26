@@ -17,7 +17,7 @@ export type LabPiece = {
   year: string | number;
 };
 
-type Position = { x: number; y: number; level: number };
+type Position = { x: number; y: number };
 type Gesture = {
   slug: string;
   pointerId: number;
@@ -31,21 +31,12 @@ type Gesture = {
 };
 
 const defaultLayout = [
-  { x: .04, y: .06, tilt: -6 },
-  { x: .50, y: .025, tilt: 4 },
-  { x: .965, y: .13, tilt: -4 },
-  { x: .06, y: .96, tilt: 5 },
-  { x: .52, y: .89, tilt: -4 },
-  { x: .962, y: 1, tilt: 5 },
-];
-
-const compactLayout = [
-  { x: .04, y: .01, tilt: -4 },
-  { x: .96, y: .025, tilt: 4 },
-  { x: .045, y: .46, tilt: -3 },
-  { x: .96, y: .49, tilt: 4 },
-  { x: .04, y: .956, tilt: -3 },
-  { x: .96, y: .965, tilt: 4 },
+  { x: .09, y: .34, tilt: -4 },
+  { x: .48, y: .07, tilt: 3 },
+  { x: .85, y: .41, tilt: -3 },
+  { x: .17, y: .5, tilt: 4 },
+  { x: .66, y: .24, tilt: -3 },
+  { x: .85, y: .55, tilt: 3 },
 ];
 
 const labels: Record<string, string> = {
@@ -76,10 +67,9 @@ export default function LabDesk({ pieces }: { pieces: LabPiece[] }) {
   const [active, setActive] = useState<LabPiece | null>(null);
   const [ink, setInk] = useState(0);
   const [notice, setNotice] = useState("");
-  const stageRef = useRef<HTMLDivElement>(null);
   const gesture = useRef<Gesture | null>(null);
+  const didDrag = useRef(false);
   const drawFrame = useRef<number | null>(null);
-  const layer = useRef(10);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const opener = useRef<HTMLButtonElement | null>(null);
 
@@ -100,46 +90,44 @@ export default function LabDesk({ pieces }: { pieces: LabPiece[] }) {
   }, [active]);
 
   const currentView = view ?? (compact ? "list" : "desk");
-  const layout = compact ? compactLayout : defaultLayout;
   const deskPieces = pieces.slice(0, defaultLayout.length);
   const inspectCover = active?.inspectCover ?? active?.cover;
   const inspectAlt = active?.inspectCover ? (active.inspectAlt ?? active.imageAlt) : active?.imageAlt;
 
   function origin(slug: string, index: number) {
-    const layoutPosition = layout[index];
-    const centeredX = deskPieces.length === 5
-      ? compact
-        ? (index === 4 ? .50 : layoutPosition.x)
-        : ([.04, .50, .965, .23, .75][index] ?? layoutPosition.x)
-      : layoutPosition.x;
-    return positions[slug] ?? { x: centeredX, y: layoutPosition.y, level: index + 1 };
+    const { x, y } = defaultLayout[index];
+    return positions[slug] ?? { x, y };
   }
 
   function startDrag(event: PointerEvent<HTMLButtonElement>, slug: string, index: number) {
     if (!event.isPrimary || event.button !== 0 || gesture.current) return;
-    const stage = stageRef.current;
     const element = event.currentTarget.closest<HTMLElement>("[data-lab-piece]");
-    if (!stage || !element) return;
+    const slot = element?.parentElement;
+    if (!element || !slot) return;
 
-    const start = { ...origin(slug, index), level: ++layer.current };
-    const width = Math.max(1, stage.clientWidth - element.offsetWidth - 24);
-    const height = Math.max(1, stage.clientHeight - element.offsetHeight - 24);
+    const start = origin(slug, index);
+    const bounds = getComputedStyle(slot);
+    const width = Math.max(1, parseFloat(bounds.paddingInlineEnd) - parseFloat(bounds.paddingInlineStart));
+    const height = Math.max(1, parseFloat(bounds.paddingBlockEnd) - parseFloat(bounds.paddingBlockStart));
+    didDrag.current = false;
     gesture.current = {
       slug, pointerId: event.pointerId, origin: start, latest: start, element,
       clientX: event.clientX, clientY: event.clientY, width, height,
     };
     event.currentTarget.setPointerCapture(event.pointerId);
     element.dataset.dragging = "true";
-    element.style.setProperty("--lab-level", String(start.level));
   }
 
   function moveDrag(event: PointerEvent<HTMLButtonElement>) {
     const drag = gesture.current;
     if (!drag || drag.pointerId !== event.pointerId) return;
+    const dx = event.clientX - drag.clientX;
+    const dy = event.clientY - drag.clientY;
+    if (!didDrag.current && Math.hypot(dx, dy) < 4) return;
+    didDrag.current = true;
     drag.latest = {
-      x: clamp(drag.origin.x + (event.clientX - drag.clientX) / drag.width),
-      y: clamp(drag.origin.y + (event.clientY - drag.clientY) / drag.height),
-      level: drag.origin.level,
+      x: clamp(drag.origin.x + dx / drag.width),
+      y: clamp(drag.origin.y + dy / drag.height),
     };
     if (drawFrame.current === null) {
       drawFrame.current = requestAnimationFrame(() => {
@@ -169,22 +157,30 @@ export default function LabDesk({ pieces }: { pieces: LabPiece[] }) {
 
     event.preventDefault();
     const start = origin(piece.slug, index);
-    const step = event.shiftKey ? .16 : .045;
+    const step = event.shiftKey ? .37 : .12;
     const next = {
       x: clamp(start.x + movement[0] * step),
       y: clamp(start.y + movement[1] * step),
-      level: ++layer.current,
     };
     setPositions((previous) => ({ ...previous, [piece.slug]: next }));
     const direction = event.key.slice(5).toLowerCase();
     setNotice(next.x === start.x && next.y === start.y
-      ? `${piece.title} is at the edge of the desk.`
+      ? `${piece.title} is at the edge of its space.`
       : `Moved ${piece.title} ${direction}.`);
+  }
+
+  function moveByClick(piece: LabPiece, index: number, fromPointer: boolean) {
+    if (fromPointer && didDrag.current) return;
+
+    const start = origin(piece.slug, index);
+    let next = { x: clamp(start.x + .32), y: start.y };
+    if (start.x === 1) next = { x: 0, y: start.y === 1 ? 0 : clamp(start.y + .32) };
+    setPositions(previous => ({ ...previous, [piece.slug]: next }));
+    setNotice(`Moved ${piece.title}.`);
   }
 
   function resetDesk() {
     setPositions({});
-    layer.current = 10;
     setNotice("The desk is reset.");
   }
 
@@ -211,12 +207,15 @@ export default function LabDesk({ pieces }: { pieces: LabPiece[] }) {
 
   return (
     <section className={styles.workbench} aria-labelledby="lab-title">
+      <noscript><style>{
+        `.${styles.workbench} :is(.${styles.deskView},.${styles.tabs},[data-desk-hint]){display:none}.${styles.workbench} .${styles.index}{display:block}`
+      }</style></noscript>
       <div className={styles.workbenchHead}>
         <div>
           <h2 id="lab-title">Workbench</h2>
-          <p id="lab-help">
+          <p data-desk-hint={currentView === "desk" ? '' : undefined}>
             {currentView === "desk"
-              ? "Move the prints by their handles, or inspect a cover."
+              ? "Drag or tap Move to reposition a print. Select the cover to inspect it."
               : "Open a project to see how the experiment worked."}
           </p>
         </div>
@@ -228,41 +227,41 @@ export default function LabDesk({ pieces }: { pieces: LabPiece[] }) {
 
       <div className={styles.workbenchModes} data-view={view ?? "auto"}>
         <div className={styles.deskView}>
-          <div className={styles.desk} ref={stageRef} aria-label="Draggable project prints">
+          <div className={styles.desk} data-print-count={deskPieces.length} aria-label="Draggable project prints">
             <span className={styles.deskMark} aria-hidden="true">+</span>
             {deskPieces.map((piece, index) => {
               const position = origin(piece.slug, index);
               const vars = {
                 "--lab-x": position.x,
                 "--lab-y": position.y,
-                "--lab-level": position.level,
-                "--lab-turn": `${layout[index].tilt}deg`,
+                "--lab-turn": `${defaultLayout[index].tilt}deg`,
               } as CSSProperties;
               return (
-                <article key={piece.slug} className={styles.print} style={vars} data-lab-piece={piece.slug}>
-                  <button type="button" className={styles.printImage} data-pointer-zone="lab" data-pointer-control aria-label={`Inspect ${piece.title}`}
-                    onClick={(event) => inspect(piece, event.currentTarget)}>
-                    {/* Local, pre-sized WebP covers also work when exported to static HTML. */}
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={piece.cover} width="660" height="440" alt={piece.imageAlt} draggable={false} />
-                  </button>
-                  <div className={styles.printCaption}>
-                    <a href={`/work/${piece.slug}/`} title={piece.title}>{piece.title}</a>
-                    <button type="button" className={styles.move}
-                      aria-label={`Move ${piece.title}`} aria-describedby="lab-keyboard-help"
-                      onPointerDown={(event) => startDrag(event, piece.slug, index)}
-                      onPointerMove={moveDrag}
-                      onPointerUp={stopDrag}
-                      onPointerCancel={stopDrag}
-                      onLostPointerCapture={stopDrag}
-                      onKeyDown={(event) => moveByKey(event, piece, index)}
-                      onClick={(event) => {
-                        if (event.detail === 0) setNotice("Use arrow keys to move the print.");
-                      }}>
-                      <span aria-hidden="true">⠿</span> Move
+                <div key={piece.slug} className={styles.printSlot}>
+                  <article className={styles.print} style={vars} data-lab-piece={piece.slug}>
+                    <button type="button" className={styles.printImage} data-pointer-zone="lab" data-pointer-control aria-label={`Inspect ${piece.title}`}
+                      data-reveal-print={index === 0 ? '' : undefined}
+                      onClick={(event) => inspect(piece, event.currentTarget)}>
+                      {/* Local, pre-sized WebP covers also work when exported to static HTML. */}
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={piece.cover} width="660" height="440" alt={piece.imageAlt} draggable={false} />
                     </button>
-                  </div>
-                </article>
+                    <div className={styles.printCaption}>
+                      <a href={`/work/${piece.slug}/`} title={piece.title}>{piece.title}</a>
+                      <button type="button" className={styles.move}
+                        aria-label={`Move ${piece.title}`} aria-describedby="lab-keyboard-help"
+                        onPointerDown={(event) => startDrag(event, piece.slug, index)}
+                        onPointerMove={moveDrag}
+                        onPointerUp={stopDrag}
+                        onPointerCancel={stopDrag}
+                        onLostPointerCapture={stopDrag}
+                        onKeyDown={(event) => moveByKey(event, piece, index)}
+                        onClick={(event) => moveByClick(piece, index, event.detail > 0)}>
+                        <span aria-hidden="true">⠿</span> Move
+                      </button>
+                    </div>
+                  </article>
+                </div>
               );
             })}
           </div>
@@ -270,7 +269,7 @@ export default function LabDesk({ pieces }: { pieces: LabPiece[] }) {
             <span>{deskPieces.length}{pieces.length > deskPieces.length ? ` of ${pieces.length}` : ""} on the desk</span>
             <button type="button" onClick={resetDesk}>Reset positions</button>
           </div>
-          <span className={styles.screenReader} id="lab-keyboard-help">Use arrow keys to move. Hold Shift to move farther.</span>
+          <span className={styles.screenReader} id="lab-keyboard-help">Activate to move a step. Choose a direction with the arrow keys and hold Shift to move farther.</span>
           <span className={styles.screenReader} role="status">{notice}</span>
         </div>
 

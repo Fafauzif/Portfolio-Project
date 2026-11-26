@@ -1,36 +1,31 @@
 .archive {
   --rule: color-mix(in srgb, var(--ink, #172340) 23%, transparent);
+  --control-rule: color-mix(in srgb, var(--ink, #172340) 61%, var(--paper, #f5f4ef));
   --muted: color-mix(in srgb, var(--ink, #172340) 73%, var(--paper, #f5f4ef));
   color: var(--ink, #172340);
   background: var(--paper, #f5f4ef);
   padding: clamp(7rem, 10vw, 9rem) max(6vw, calc((100vw - 82rem) / 2)) clamp(5rem, 9vw, 8rem);
+  overflow-wrap: anywhere;
 }
 
 .archiveHeader {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(14rem, 25rem);
+  grid-template-columns: minmax(0, 1fr) minmax(0, min(44%, 25rem));
   align-items: end;
   column-gap: 5vw;
   row-gap: 2rem;
 }
 
-.eyebrow, .cardMeta, .count {
-  font: 500 .73rem/1.4 var(--mono, monospace);
-  letter-spacing: .02em;
-}
-
-.eyebrow { margin: 0 0 1.2rem; }
-.eyebrow a { color: inherit; text-underline-offset: .22em; }
-.eyebrow span { margin-inline: .4rem; color: var(--muted); }
-
+.headingArea { min-width: 0; container-type: inline-size; }
 .archiveHeader h1 {
   margin: 0;
-  max-width: 10ch;
-  font: 500 clamp(4rem, 10.6vw, 11rem)/.88 var(--display, Georgia, serif);
-  letter-spacing: -.082em;
+  font: 400 clamp(3rem, 9vw, 9rem)/.94 var(--display, Georgia, serif);
+  font-size: clamp(2.75rem, 16cqi, 9rem);
+  letter-spacing: -.065em;
+  text-wrap: balance;
 }
 
-.archiveHeader[data-filtered="true"] h1 { max-width: 15ch; font-size: clamp(3.3rem, 7.6vw, 8rem); }
+.archiveHeader[data-filtered="true"] h1 { font-size: min(clamp(2.4rem, 13.4cqi, 7.1rem), 19cqi); }
 .archiveHeader h1 em { font-weight: inherit; }
 .intro > p { max-width: 31ch; margin: 0 0 1.6rem; color: var(--muted); font: 400 1.09rem/1.5 var(--sans, sans-serif); }
 .searchSlot { min-height: 4.1rem; }
@@ -41,9 +36,9 @@
   position: relative;
   display: flex;
   align-items: center;
-  border: 1px solid var(--rule);
+  border: 1px solid var(--control-rule);
   padding: 0 1rem;
-  border-radius: 99px;
+  border-radius: 4px;
   background: color-mix(in srgb, white 27%, transparent);
 }
 .searchField::before {
@@ -72,22 +67,23 @@
   gap: .75rem 1rem;
   flex-wrap: wrap;
 }
-.filters { display: flex; flex-wrap: wrap; gap: .4rem; }
+.filters { min-width: 0; display: flex; flex-wrap: wrap; gap: .4rem; }
 .filters a {
   display: inline-flex;
   align-items: center;
-  min-height: 2.75rem;
-  border: 1px solid var(--rule);
-  border-radius: 99px;
+  min-height: 44px;
+  max-inline-size: 100%;
+  border: 1px solid var(--control-rule);
+  border-radius: 3px;
   padding: .4rem .9rem;
   color: inherit;
   text-decoration: none;
   font: 550 .87rem/1.15 var(--sans, sans-serif);
   transition: background-color .2s, border-color .2s, color .2s;
 }
-.filters a:hover { border-color: currentColor; }
+.filters a:hover { border-color: var(--blue, #203fc7); color: var(--blue, #203fc7); }
 .filters a[aria-current] { color: var(--paper, #f5f4ef); background: var(--ink, #172340); border-color: var(--ink, #172340); }
-.count { flex: none; color: var(--muted); }
+.count { flex: none; color: var(--muted); font: 500 .83rem/1.4 var(--sans, sans-serif); }
 
 .lead {
   display: grid;
@@ -137,9 +133,10 @@
 }
 .cover:active .coverArrow { background: var(--ink, #172340); color: var(--paper, #f5f4ef); }
 
-.cardCopy { min-width: 0; }
+.cardCopy, .dialogCopy { min-width: 0; container-type: inline-size; }
 .lead .cardCopy { max-width: 29rem; padding-bottom: .1rem; }
-.cardMeta { display: flex; justify-content: space-between; gap: .55rem; color: var(--muted); margin: 0 0 .62rem; }
+.cardMeta { display: flex; flex-wrap: wrap; gap: .25em .7em; color: var(--muted); margin: 0 0 .68rem; font: 550 .84rem/1.35 var(--sans, sans-serif); }
+.cardMeta time { font-variant-numeric: tabular-nums; }
 .cardCopy h2, .dialogCopy h2, .empty h2 {
   font: 500 clamp(1.8rem, 3.3vw, 4.35rem)/.95 var(--display, Georgia, serif);
   letter-spacing: -.055em;
@@ -147,7 +144,9 @@
   overflow-wrap: anywhere;
   text-wrap: pretty;
 }
-.lead h2 { font-size: clamp(2.55rem, 5.5vw, 6rem); }
+.cardCopy h2 { font-size: clamp(1.8rem, 9cqi, 4.35rem); }
+.lead h2 { font-size: clamp(2.2rem, 13cqi, 5rem); }
+.cardCopy h2[data-long-word="true"], .dialogCopy h2[data-long-word="true"] { font-size: clamp(1.4rem, 7.4cqi, 3.45rem); }
 .titleLink { text-underline-offset: .12em; text-decoration-thickness: .035em; }
 .titleLink:hover { text-decoration-line: underline; }
 .card:has(.titleLink:focus-visible) .coverArrow,
@@ -204,8 +203,7 @@
 .dialogInner { position: relative; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); }
 .dialogInner > img { min-height: 26rem; }
 .dialogCopy { padding: 4.25rem clamp(1.25rem, 4vw, 3.25rem) 2.4rem; }
-.dialogCopy .eyebrow { margin-bottom: 1rem; color: var(--muted); }
-.dialogCopy > p:not(.eyebrow) { margin: 0 0 .75rem; font: 400 1rem/1.5 var(--sans, sans-serif); }
+.dialogCopy > p:not(.cardMeta) { margin: 0 0 .75rem; font: 400 1rem/1.5 var(--sans, sans-serif); }
 .previewRole strong { margin-right: .31em; }
 .close {
   position: absolute;
@@ -228,12 +226,12 @@
   .archive { padding-inline: clamp(1rem, 6vw, 3rem); }
   .archiveHeader, .lead { grid-template-columns: minmax(0, 1fr); }
   .archiveHeader { align-items: start; }
-  .archiveHeader h1 { font-size: clamp(3.75rem, 14vw, 7rem); }
-  .archiveHeader[data-filtered="true"] h1 { overflow-wrap: anywhere; font-size: clamp(3.2rem, 10vw, 7rem); }
+  .archiveHeader h1 { font-size: clamp(2.75rem, 15cqi, 7rem); }
+  .archiveHeader[data-filtered="true"] h1 { font-size: min(clamp(2.4rem, 12.6cqi, 6rem), 19cqi); }
   .filters { width: 100%; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .filters a { padding-inline: .65rem; font-size: .82rem; justify-content: center; text-align: center; }
-  .lead h2 { font-size: clamp(2.5rem, 8vw, 4.4rem); }
-  .card h2 { font-size: clamp(2rem, 6vw, 3.4rem); }
+  .lead h2 { font-size: clamp(2.1rem, 10.6cqi, 4.4rem); }
+  .card h2 { font-size: clamp(1.8rem, 9.4cqi, 3.4rem); }
   .grid { display: block; }
   .card + .card { margin-top: 2.5rem; }
   .dialogInner { grid-template-columns: 1fr; }

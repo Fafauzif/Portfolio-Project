@@ -19,7 +19,41 @@
   position: relative;
 }
 
+[data-pointer-tracer] {
+  display: none;
+  position: fixed;
+  inset: 0 auto auto 0;
+  z-index: 32;
+  width: 10px;
+  height: 10px;
+  border: 1.4px solid #3049dc;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px #f3ead4;
+  color: #3049dc;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate3d(var(--trace-x, -25px), var(--trace-y, -25px), 0);
+  transition: opacity 150ms ease;
+}
+
+[data-reveal-print] {
+  overflow: clip;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-motion-link] .diagonal { transition: transform 180ms var(--ease); }
+  [data-motion-link]:focus-visible .diagonal { transform: translateX(3px); }
+}
+
 @media (any-hover: hover) and (any-pointer: fine) and (prefers-reduced-motion: no-preference) {
+  [data-pointer-tracer] { display: block; }
+  [data-pointer-tracer][data-pointer-live] { opacity: .94; }
+  [data-pointer-tracer][data-pointer-glide] {
+    transition: transform 120ms cubic-bezier(.2,.72,.24,1), opacity 150ms ease;
+  }
+
+  [data-motion-link]:hover .diagonal { transform: translateX(3px); }
+
   :where([data-pointer-zone='cover'], [data-pointer-zone='lab'])::before {
     content: '';
     position: absolute;
@@ -57,6 +91,10 @@
       opacity: .88;
     }
   }
+}
+
+@media (forced-colors: active), print {
+  [data-pointer-tracer] { display: none; }
 }
 
 :where([data-slot='button'], [data-pointer-zone='button'], [data-pointer-control]):active:not(:disabled) {
