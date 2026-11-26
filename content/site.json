@@ -1,0 +1,138 @@
+{
+  "name": "Mara Adair",
+  "initials": "MA",
+  "tagline": "I don’t stop at the deck.",
+  "role": "Strategy, research & digital builds",
+  "location": "Working remotely",
+  "resume": "/portfolio-media/mara-adair-resume.pdf",
+  "intro": "I make campaigns, research tools, and small digital systems that carry the work from the brief to the people using it.",
+  "about": [
+    "I’m Mara, a strategist and independent builder. I’m drawn to projects where a good research finding needs a second life as something people can use: an invitation, a workflow, a clear explanation, or a small piece of software.",
+    "My work spans civic campaigns, cultural programs, operations tools, and service proposals. I like sitting in on real handoffs, reading what people ask when they get stuck, and keeping the early versions around so the final decision has a record.",
+    "In the Lab I make browser experiments and 3D studies. They let me test ideas about movement, type, and material at a smaller scale than a client project."
+  ],
+  "skills": [
+    "Audience research",
+    "Campaign strategy",
+    "Service design",
+    "Editorial writing",
+    "Prototyping",
+    "Front-end development",
+    "Workflow automation",
+    "3D art direction"
+  ],
+  "contact": {
+    "email": "mara@fieldwork.example"
+  },
+  "experience": [
+    {
+      "title": "Campaign strategy lead",
+      "organization": "Civic Assembly Studio",
+      "period": "2025–2026",
+      "summary": "Mapped the first-visit journey for public programs, wrote campaign briefs, and worked with designers and hosts to keep the invitation useful through arrival.",
+      "projects": [
+        "common-ground"
+      ]
+    },
+    {
+      "title": "Independent product designer and developer",
+      "organization": "Fieldwork Studio",
+      "period": "2024–2026",
+      "summary": "Built small tools for coordination and research, from a shift-swap app to a browser extension for keeping excerpts in context.",
+      "projects": [
+        "relay-desk",
+        "margin-clip",
+        "receipt-loop",
+        "typesetter",
+        "source-atlas",
+        "paper-current",
+        "half-life"
+      ]
+    },
+    {
+      "title": "Service research collaborator",
+      "organization": "Bramble Regional Transit",
+      "period": "2026",
+      "summary": "Worked with the service team on rider decisions during disruptions and prototyped a status board with a visible, useful offline state.",
+      "projects": [
+        "transit-notes",
+        "transit-board"
+      ]
+    },
+    {
+      "title": "Campaign writer and facilitator",
+      "organization": "Passage Design School",
+      "period": "2024–2025",
+      "summary": "Helped first-time participants picture themselves in a studio workshop and designed a class format built around audience questions.",
+      "projects": [
+        "open-house",
+        "a-room-for-questions"
+      ]
+    },
+    {
+      "title": "Editorial collaborator",
+      "organization": "Tin Roof Audio",
+      "period": "2026",
+      "summary": "Edited a documentary script for pacing and clarity, keeping narration and interview material distinct during the production handoff.",
+      "projects": [
+        "second-voice"
+      ]
+    }
+  ],
+  "recognition": [
+    {
+      "title": "Jury commendation",
+      "organization": "Material Futures Challenge",
+      "year": 2026,
+      "distinction": "Team proposal",
+      "project": "second-current"
+    },
+    {
+      "title": "Shortlisted",
+      "organization": "Open Carriage Design Sprint",
+      "year": 2026,
+      "distinction": "Team prototype",
+      "project": "window-seat"
+    },
+    {
+      "title": "Selected for public reading",
+      "organization": "Civic Futures Forum",
+      "year": 2026,
+      "distinction": "Team policy brief",
+      "project": "small-shifts"
+    },
+    {
+      "title": "Finalist",
+      "organization": "Room for Business Case Challenge",
+      "year": 2025,
+      "distinction": "Team business case",
+      "project": "overhead"
+    },
+    {
+      "title": "Special mention",
+      "organization": "Brief Exchange Showcase",
+      "year": 2024,
+      "distinction": "Team pitch",
+      "project": "signal-room"
+    }
+  ],
+  "testimonials": [
+    {
+      "quote": "Mara brought the campaign back to the question people were actually asking. We were still using that visitor map when the next program brief came around.",
+      "author": "Dara Bell",
+      "role": "Program lead, Civic Assembly Studio"
+    },
+    {
+      "quote": "The useful part was watching her test the swap that went wrong. The team finally had a simple way to tell who was still on the roster.",
+      "author": "Imogen Ames",
+      "role": "Coordinator, Relay Volunteer Network"
+    }
+  ],
+  "portrait": {
+    "src": "/portfolio-media/mara-portrait.webp",
+    "alt": "Portrait of Mara in a slate jacket against an architectural backdrop"
+  },
+  "heroProject": "common-ground",
+  "labProject": "paper-current",
+  "preview": true
+}

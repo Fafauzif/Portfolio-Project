@@ -1,0 +1,10 @@
+.git/
+node_modules/
+.next/
+out/
+assets/
+docs/
+test/
+Profile*.pdf
+FireShot*
+vibe-skills-cheatsheet.*

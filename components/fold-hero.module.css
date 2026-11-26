@@ -1,0 +1,513 @@
+.root {
+  --paper-front: #0b1429;
+  --paper-back: var(--paper, #f4f2eb);
+  --fold-type: #f6f4ec;
+  --fold-accent: #b0c8ff;
+  --fold-height: 100svh;
+  --fold-track: clamp(490px, 83svh, 840px);
+  --crease: .507;
+  --page-ink: 0;
+  --fold-light: 0;
+  --fold-progress: 0;
+  position: relative;
+  min-block-size: var(--fold-height);
+  background: var(--paper-front);
+  color: var(--fold-type);
+}
+
+.root[data-fold-ready] {
+  min-block-size: calc(var(--fold-height) + var(--fold-track));
+}
+
+.root[data-fold-flight] {
+  z-index: 7;
+}
+
+.stage {
+  position: relative;
+  inset-block-start: 0;
+  block-size: var(--fold-height);
+  min-block-size: min(32rem, 100svh);
+  isolation: isolate;
+  perspective: 2200px;
+  overflow: clip;
+}
+
+.root[data-fold-ready] .stage {
+  position: sticky;
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 48% -6%, #fdffff 0, transparent 68%),
+    var(--paper-back);
+  opacity: var(--page-ink);
+  pointer-events: none;
+}
+
+.castShadow {
+  position: absolute;
+  inset: 66% 13% -1%;
+  background: radial-gradient(ellipse, rgba(48, 57, 83, .24), rgba(48, 57, 83, 0) 65%);
+  transform: scaleX(var(--sheet-scale, 1));
+  opacity: var(--page-ink);
+  pointer-events: none;
+}
+
+.sheet {
+  position: absolute;
+  inset: 0;
+  display: block;
+  padding: 0;
+  margin: 0;
+  font-family: var(--display, Georgia, serif);
+  font-size: clamp(4rem, min(20.7vw, 31.5svh), 24rem);
+  font-weight: 400;
+  line-height: .84;
+  letter-spacing: -.083em;
+  transform-origin: center;
+  transform-style: preserve-3d;
+  transform:
+    rotateZ(var(--sheet-roll, 0deg))
+    rotateY(var(--sheet-yaw, 0deg))
+    rotateX(var(--sheet-pitch, 0deg))
+    scale(var(--sheet-scale, 1), var(--sheet-vertical-scale, 1));
+}
+
+.panel {
+  position: absolute;
+  inset-inline: 0;
+  display: block;
+  transform-style: preserve-3d;
+}
+
+.upper {
+  inset-block-start: 0;
+  block-size: calc(var(--crease) * 100%);
+  transform-origin: center bottom;
+  transform: rotateX(var(--top-fold, 0deg));
+}
+
+.lower {
+  inset-block-end: 0;
+  block-size: calc((1 - var(--crease)) * 100%);
+  transform-origin: center top;
+  transform: rotateX(var(--bottom-fold, 0deg));
+}
+
+.ink,
+.verso {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.ink {
+  background-color: var(--paper-front);
+}
+
+.ink::before,
+.ink::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+}
+
+.ink::before {
+  background: linear-gradient(151deg, rgba(231, 242, 255, .035), rgba(83, 106, 166, .14) 59%, rgba(1, 4, 13, .56));
+  opacity: var(--fold-light);
+}
+
+.ink::after {
+  border: 1px solid rgba(172, 195, 247, .31);
+  opacity: calc(.14 + .86 * var(--fold-light));
+}
+
+.upper .ink {
+  align-items: end;
+  padding-block-end: .108em;
+}
+
+.lower .ink {
+  align-items: start;
+  padding-block-start: .065em;
+}
+
+.lower .ink::before {
+  background: linear-gradient(164deg, rgba(2, 4, 12, .45), rgba(90, 124, 200, .24) 48%, rgba(1, 4, 13, .13));
+}
+
+.line {
+  max-inline-size: calc(100% - 2rem);
+  position: relative;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.line em {
+  color: var(--fold-accent);
+  font-family: inherit;
+  font-weight: inherit;
+  letter-spacing: -.1em;
+}
+
+.corner {
+  position: absolute;
+  inset: auto 0 0 auto;
+  width: clamp(2.25rem, 6.1vw, 5.2rem);
+  aspect-ratio: 1;
+  clip-path: polygon(100% 0, 100% 100%, 0 100%);
+  background: linear-gradient(135deg, #092153 15%, transparent 54%, #17389e 100%), var(--fold-art) 25% 42% / 500% auto #264ff5;
+}
+
+.corner::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  clip-path: polygon(100% 0, 100% 8%, 8% 100%, 0 100%);
+  background: #b8ceff;
+  opacity: .72;
+}
+
+.verso {
+  background: #a5beff;
+  transform: rotateY(180deg);
+}
+
+.verso span {
+  position: absolute;
+  inset-inline: 0;
+  background-position: center;
+  background-size: var(--paper-print-size, cover);
+}
+
+.root[data-fold-art-visible] .verso span {
+  background-image: var(--fold-art);
+}
+
+.upper .verso span {
+  inset-block-start: 0;
+  block-size: calc(100% / var(--crease));
+}
+
+.lower .verso span {
+  inset-block-end: 0;
+  block-size: calc(100% / (1 - var(--crease)));
+}
+
+.proxy {
+  position: fixed;
+  z-index: 4;
+  inset: 0 auto auto 0;
+  transform-origin: 0 0;
+  display: none;
+  background: #a5beff var(--fold-art) center / cover no-repeat;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.proxy[data-fold-image-ready] {
+  background-image: none;
+}
+
+.proxyImage {
+  visibility: hidden;
+  position: absolute;
+  inset: 0 auto auto 0;
+  max-width: none;
+  max-height: none;
+  transform-origin: 0 0;
+}
+
+.proxy[data-fold-image-ready] .proxyImage {
+  visibility: visible;
+}
+
+.root[data-fold-flight] .proxy {
+  display: block;
+}
+
+.root[data-fold-flight] .sheet,
+.root[data-fold-complete] .sheet {
+  opacity: 0;
+}
+
+.root[data-fold-flight] .castShadow,
+.root[data-fold-complete] .castShadow {
+  opacity: 0;
+}
+
+.root[data-fold-complete] .backdrop {
+  opacity: 1;
+}
+
+.root ~ :global(*) :global([data-fold-landing][data-fold-arrival="receiving"]) {
+  opacity: 0;
+}
+
+.margin {
+  position: absolute;
+  z-index: 5;
+  inset: clamp(6rem, 13svh, 9rem) clamp(1.2rem, 5vw, 5.2rem) clamp(1.15rem, 5.4svh, 3.7rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.role {
+  margin: 0;
+  align-self: start;
+  font-family: var(--mono, monospace);
+  font-size: clamp(.68rem, .9vw, .84rem);
+  line-height: 1.4;
+  letter-spacing: .082em;
+  text-transform: uppercase;
+  color: #c4d4f8;
+}
+
+.role,.scrollCue {
+  background-color: var(--paper-front);
+  box-shadow: 0 0 0 .22rem var(--paper-front);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.workLink {
+  display: inline-flex;
+  min-block-size: 3rem;
+  align-items: center;
+  justify-content: center;
+  gap: 1.05rem;
+  border: 1px solid #d7e3ff;
+  border-radius: 4px;
+  padding: .55rem .9rem .55rem 1rem;
+  background: #d7e3ff;
+  color: #101b35;
+  font: 600 .93rem / 1.15 var(--sans, sans-serif);
+  text-decoration: none;
+  white-space: nowrap;
+  pointer-events: auto;
+  transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;
+}
+
+.workLink span {
+  display: inline-grid;
+  width: .82rem;
+  height: .82rem;
+  place-items: center;
+  transform: translateY(-1px);
+}
+
+.workLink span::before,
+.workLink span::after {
+  grid-area: 1 / 1;
+  content: "";
+  display: block;
+}
+
+.workLink span::before {
+  height: .78rem;
+  border-left: 1.5px solid currentColor;
+}
+
+.workLink span::after {
+  width: .5rem;
+  height: .5rem;
+  border: solid currentColor;
+  border-width: 0 1.5px 1.5px 0;
+  transform: translateY(.13rem) rotate(45deg);
+}
+
+.workLink:is(:hover,:focus-visible) {
+  background: #f4f6ff;
+}
+
+.workLink:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 4px;
+}
+
+.scrollCue {
+  display: none;
+  align-items: center;
+  gap: .8rem;
+  margin: 0;
+  font-family: var(--mono, monospace);
+  font-size: .7rem;
+  letter-spacing: .09em;
+  line-height: 1;
+  text-transform: uppercase;
+  color: #c4d4f8;
+  white-space: nowrap;
+}
+
+.root[data-fold-ready]:not([data-fold-unfolded]) .scrollCue {
+  display: flex;
+}
+
+.scrollCue span {
+  position: relative;
+  width: clamp(1.7rem, 5vw, 4rem);
+  height: 1px;
+  background: currentColor;
+  opacity: .6;
+}
+
+.scrollCue span::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  transform: scaleX(var(--fold-progress));
+  transform-origin: left;
+  background: currentColor;
+  height: 2px;
+  opacity: 1;
+}
+
+.root[data-fold-dark-controls] :is(.role, .scrollCue) {
+  color: #17284c;
+  background-color: var(--paper-back);
+  box-shadow: 0 0 0 .22rem var(--paper-back);
+}
+
+.root[data-fold-dark-controls] .workLink {
+  background: #101b35;
+  border-color: #101b35;
+  color: #f4f6ff;
+}
+
+.root[data-fold-dark-controls] .workLink:is(:hover,:focus-visible) {
+  background: #1d3db2;
+}
+
+.root[data-fold-dark-controls] .workLink:focus-visible {
+  outline-color: #101b35;
+}
+
+.root[data-fold-unfolded] .role,
+.root[data-fold-chrome-passed] .margin:not(:focus-within) {
+  visibility: hidden;
+}
+
+@media (max-width: 767px) {
+  .root {
+    --fold-track: clamp(280px, 54svh, 480px);
+    --crease: .51;
+  }
+
+  .sheet {
+    font-size: clamp(3.65rem, min(22.5vw, 17svh), 10rem);
+    line-height: .81;
+    letter-spacing: -.072em;
+  }
+
+  .line {
+    inline-size: calc(100% - 2.4rem);
+    text-align: start;
+  }
+
+  .leadWord {
+    display: block;
+    padding-inline-end: .3em;
+    text-align: end;
+  }
+
+  .corner {
+    width: clamp(3.4rem, 16.5vw, 5.4rem);
+  }
+
+  .line em {
+    letter-spacing: -.083em;
+  }
+
+  .margin {
+    inset: clamp(5.35rem, 12.8svh, 7rem) 1.18rem 1.65rem;
+  }
+
+  .role {
+    max-inline-size: 16rem;
+    font-size: .64rem;
+  }
+
+  .scrollCue {
+    gap: .5rem;
+    font-size: .58rem;
+  }
+
+  .workLink {
+    min-block-size: 2.8rem;
+    gap: .7rem;
+    padding-inline: .65rem;
+    font-size: .87rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .scrollCue span {
+    display: none;
+  }
+
+  .margin {
+    inset-inline: 1rem;
+  }
+}
+
+@media (max-height: 480px) and (orientation: landscape) {
+  .margin {
+    inset-block-start: max(calc(var(--nav-height, 76px) + 10px), 19svh);
+    inset-block-end: .85rem;
+  }
+
+  .sheet {
+    font-size: min(24vh, 14vw);
+  }
+
+  .line {
+    text-align: center;
+  }
+
+  .leadWord {
+    display: inline;
+    padding-inline-end: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root[data-fold-ready] {
+    min-block-size: var(--fold-height);
+  }
+
+  .root[data-fold-ready] .stage {
+    position: relative;
+  }
+
+  .sheet,
+  .panel {
+    transform: none;
+  }
+
+  .backdrop,
+  .castShadow,
+  .proxy,
+  .scrollCue,
+  .root[data-fold-ready]:not([data-fold-unfolded]) .scrollCue {
+    display: none;
+  }
+
+  .workLink {
+    transition: none;
+  }
+}
