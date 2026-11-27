@@ -1,6 +1,7 @@
 import { CategoryIcon } from '@/components/category-icon';
 import FoldHero from '@/components/fold-hero';
 import { Button } from '@/components/ui/button';
+import { DirectoryMarks, RegisterMark } from '@/components/print-marks';
 import { ProfileHeading } from '@/components/profile-heading';
 import { CATEGORIES, categoryLabel, getProjects, getSite, type Project } from '@/lib/content';
 import { withCanonical } from '@/lib/site-metadata';
@@ -39,6 +40,7 @@ export default function Home() {
         <div className="selected-head">
           <h2 id="selected-title">Selected <em>work.</em></h2>
           <Button variant="outline" asChild><a href="/work/" data-motion-link>Browse all projects <span className="diagonal" aria-hidden="true" /></a></Button>
+          <RegisterMark className="selected-register" />
         </div>
         <article className="home-feature">
           <a href={'/work/' + featuredLeading.slug + '/'} className="home-project-link" aria-labelledby={'selected-' + featuredLeading.slug} data-motion-link>
@@ -74,10 +76,13 @@ export default function Home() {
 
       <section className="directory" aria-labelledby="directory-title">
         <div className="wrap directory-layout">
-          <h2 id="directory-title">Find the work<br />you came <em>for.</em></h2>
+          <div>
+            <h2 id="directory-title">Find the work<br />you came <em>for.</em></h2>
+            <DirectoryMarks />
+          </div>
           <div className="directory-links">
-            {CATEGORIES.filter(category => all.some(project => project.category === category.id)).map(category => (
-              <a href={'/work/category/' + category.id + '/'} key={category.id} data-motion-link>
+            {CATEGORIES.filter(category => all.some(project => project.category === category.id)).map((category, index) => (
+              <a data-print-branch={index + 1} href={'/work/category/' + category.id + '/'} key={category.id} data-motion-link>
                 <CategoryIcon category={category.id} />
                 <div><h3>{category.label}</h3><p>{category.description}</p></div>
                 <span className="diagonal" aria-hidden="true" />
@@ -90,6 +95,7 @@ export default function Home() {
       {lab && <section className="lab-feature" aria-labelledby="home-lab-title" data-pointer-tone="navy">
         <div className="wrap lab-feature-grid">
           <div>
+            <RegisterMark className="lab-register" />
             <h2 id="home-lab-title">Things I made<br />to <em>find out.</em></h2>
             <p>Small tools, moving studies, and prototypes that started with a question worth testing.</p>
             <a href="/lab/" className="link-label" data-motion-link>Open the Lab <span className="diagonal" aria-hidden="true" /></a>
@@ -100,6 +106,7 @@ export default function Home() {
 
       <section className="home-about wrap" data-portrait={Boolean(site.portrait)} aria-labelledby="home-about-title">
         <div>
+          <RegisterMark className="about-register" />
           <ProfileHeading name={site.name} as="h2" id="home-about-title" />
           <p>{site.intro}</p>
           <a className="link-label" href="/about/" data-motion-link>Read more about my work <span className="diagonal" aria-hidden="true" /></a>

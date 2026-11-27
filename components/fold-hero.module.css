@@ -48,7 +48,7 @@
   inset: 66% 13% -1%;
   background: radial-gradient(ellipse, rgba(48, 57, 83, .24), rgba(48, 57, 83, 0) 65%);
   transform: scaleX(var(--sheet-scale, 1));
-  opacity: calc(var(--page-ink) * var(--print-opacity, 1));
+  opacity: var(--page-ink);
   pointer-events: none;
 }
 
@@ -66,6 +66,7 @@
   transform-origin: center;
   transform-style: preserve-3d;
   transform:
+    translateX(var(--compact-drift, 0px))
     rotateZ(var(--sheet-roll, 0deg))
     rotateY(var(--sheet-yaw, 0deg))
     rotateX(var(--sheet-pitch, 0deg))
@@ -181,7 +182,6 @@
 }
 
 .verso {
-  opacity: var(--print-opacity, 1);
   background: #a5beff;
   transform: rotateY(180deg);
 }
@@ -206,6 +206,28 @@
   inset-block-end: 0;
   block-size: calc(100% / (1 - var(--crease)));
 }
+
+.flyingPrint {
+  position: fixed;
+  inset: 0 auto auto 0;
+  display: none;
+  z-index: 10;
+  overflow: hidden;
+  transform-origin: 0 0;
+  pointer-events: none;
+}
+
+.flyingPrint img {
+  position: absolute;
+  inset: 0 auto auto 0;
+  max-inline-size: none;
+  max-block-size: none;
+  transform-origin: 0 0;
+}
+
+.root[data-fold-flight] .flyingPrint { display: block; }
+.root[data-fold-cleared] .verso,
+.root[data-fold-cleared] .castShadow { visibility: hidden; }
 
 .actions {
   position: absolute;
@@ -395,6 +417,7 @@
 
   .backdrop,
   .castShadow,
+  .flyingPrint,
   .paperLight {
     display: none;
   }

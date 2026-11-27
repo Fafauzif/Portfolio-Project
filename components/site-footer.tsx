@@ -1,3 +1,4 @@
+import { RegisterMark } from '@/components/print-marks';
 import type { SiteContent } from '@/lib/content';
 
 export default function SiteFooter({ site }: { site: SiteContent }) {
@@ -5,7 +6,10 @@ export default function SiteFooter({ site }: { site: SiteContent }) {
     <footer className="site-footer" data-pointer-tone="navy">
       <div className="wrap">
         <div className="footer-main">
-          <p className="footer-title">Let’s make<br />something <em>work.</em></p>
+          <div>
+            <RegisterMark className="footer-register" />
+            <p className="footer-title">Let’s make<br />something <em>work.</em></p>
+          </div>
           <a className="footer-contact" href="/contact/" data-pointer-zone="button" data-motion-link>Get in touch <span className="diagonal" aria-hidden="true" /></a>
         </div>
         <div className="footer-base">
