@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { RegisterMark } from '@/components/print-marks';
 import { ProfileHeading } from '@/components/profile-heading';
 import { getSite } from '@/lib/content';
 import { withCanonical } from '@/lib/site-metadata';
@@ -28,6 +29,7 @@ export default function AboutPage() {
       {schema && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema).replace(/</g, '\\u003c') }} />}
       <div className="about-layout wrap" data-portrait={Boolean(site.portrait)}>
         <header className="interior-heading">
+          <RegisterMark className="page-register" />
           <ProfileHeading name={site.name} id="person" />
           <p className="interior-lead">{site.role}</p>
           <div className="profile-actions">

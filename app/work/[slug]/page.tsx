@@ -1,3 +1,4 @@
+import { RegisterMark } from '@/components/print-marks';
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import type { CSSProperties } from "react";
@@ -113,6 +114,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
               All work
             </a>
             {category && <a href={`/work/category/${category.id}/`} data-pointer-control>{category.label}</a>}
+            <RegisterMark className="case-register" variant={build ? "signal" : "crop"} />
           </nav>
           <div className={styles.intro}>
             <div className={styles.titleArea}><CaseTitle title={project.title} /></div>

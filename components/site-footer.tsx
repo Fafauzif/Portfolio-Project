@@ -7,7 +7,7 @@ export default function SiteFooter({ site }: { site: SiteContent }) {
       <div className="wrap">
         <div className="footer-main">
           <div>
-            <RegisterMark className="footer-register" />
+            <RegisterMark className="footer-register" variant="crop" />
             <p className="footer-title">Let’s make<br />something <em>work.</em></p>
           </div>
           <a className="footer-contact" href="/contact/" data-pointer-zone="button" data-motion-link>Get in touch <span className="diagonal" aria-hidden="true" /></a>

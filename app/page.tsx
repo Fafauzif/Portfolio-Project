@@ -38,9 +38,13 @@ export default function Home() {
 
       <section className="selected wrap" id="selected" aria-labelledby="selected-title">
         <div className="selected-head">
-          <h2 id="selected-title">Selected <em>work.</em></h2>
-          <Button variant="outline" asChild><a href="/work/" data-motion-link>Browse all projects <span className="diagonal" aria-hidden="true" /></a></Button>
-          <RegisterMark className="selected-register" />
+          <div className="selected-head-copy">
+            <h2 id="selected-title">Selected <em>work.</em></h2>
+            <div className="selected-head-actions">
+              <Button variant="outline" asChild><a href="/work/" data-motion-link>Browse all projects <span className="diagonal" aria-hidden="true" /></a></Button>
+              <RegisterMark className="selected-register" />
+            </div>
+          </div>
         </div>
         <article className="home-feature">
           <a href={'/work/' + featuredLeading.slug + '/'} className="home-project-link" aria-labelledby={'selected-' + featuredLeading.slug} data-motion-link>
@@ -95,7 +99,7 @@ export default function Home() {
       {lab && <section className="lab-feature" aria-labelledby="home-lab-title" data-pointer-tone="navy">
         <div className="wrap lab-feature-grid">
           <div>
-            <RegisterMark className="lab-register" />
+            <RegisterMark className="lab-register" variant="signal" />
             <h2 id="home-lab-title">Things I made<br />to <em>find out.</em></h2>
             <p>Small tools, moving studies, and prototypes that started with a question worth testing.</p>
             <a href="/lab/" className="link-label" data-motion-link>Open the Lab <span className="diagonal" aria-hidden="true" /></a>

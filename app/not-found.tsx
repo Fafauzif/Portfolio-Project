@@ -1,9 +1,11 @@
+import { RegisterMark } from '@/components/print-marks';
 import { Button } from '@/components/ui/button';
 
 export default function NotFound() {
   return (
     <main className="interior wrap not-found" id="main-content" tabIndex={-1}>
       <div>
+        <RegisterMark className="page-register" variant="crop" />
         <p className="eyebrow">Page not found · 404</p>
         <h1>Out of <em>frame.</em></h1>
         <p>The page may have moved. The work archive is a good place to pick up the thread.</p>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
+import { RegisterMark } from "./print-marks";
 import { CategoryIcon } from "./category-icon";
 import type { Category as CategoryId } from "@/lib/content";
 import WorkArrow from "./work-arrow";
@@ -139,6 +140,7 @@ export default function WorkArchive({ projects, categories, initialCategory = "a
     <main className={styles.archive} id="main-content" tabIndex={-1}>
       <header className={styles.archiveHeader} data-filtered={!!currentCategory}>
         <div className={styles.headingArea}>
+          <RegisterMark className="page-register" variant="crop" />
           <h1>{currentCategory ? currentCategory.label : <>Work in <em>print.</em></>}</h1>
         </div>
         <div className={styles.intro}>

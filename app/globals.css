@@ -94,41 +94,28 @@ main:focus { outline: none; }
 .home-companions { display: grid; grid-template-columns: minmax(0,1.11fr) minmax(0,.89fr); gap: clamp(30px,6.5vw,104px); margin-top: clamp(57px,8vw,120px); align-items: start; }
 [data-fold-landing][data-print-in-flight] > img { opacity: 0; }
 
-@supports (grid-template-columns: subgrid) {
-  @media (min-width: 960px) {
-    .selected {
-      display: grid;
-      grid-template-columns: minmax(0, 5fr) minmax(0, 8fr);
-      grid-template-rows: auto 1fr auto;
-      column-gap: clamp(21px,4vw,62px);
-    }
-    .selected-head {
-      grid-area: 1 / 1;
-      align-self: start;
-      display: block;
-      position: relative;
-      z-index: 1;
-      container-type: inline-size;
-    }
-    .selected-head h2 { font-size: clamp(54px,23cqi,116px); text-wrap: initial; }
-    .selected-head h2 em { display: block; }
-    .selected-head > a {
-      margin-block-start: 18px; max-inline-size: 100%; white-space: normal; text-align: center;
-    }
-    .home-feature,.home-feature .home-project-link {
-      display: grid;
-      grid-area: 1 / 1 / 3 / -1;
-      grid-template-columns: subgrid;
-      grid-template-rows: subgrid;
-      gap: inherit;
-      margin-top: 0;
-      align-items: start;
-    }
-    .home-feature .home-cover { grid-area: 1 / 2 / 3; }
-    .home-feature-info { grid-area: 2 / 1; padding-block-start: 20px; }
-    .home-companions { grid-area: 3 / 1 / 4 / -1; }
+.selected-head-copy { display: contents; }
+@media (min-width: 960px) {
+  .selected-head {
+    display: block;
+    container-type: inline-size;
+    padding-block-end: 20px;
   }
+  .selected-head-copy {
+    display: block;
+    max-inline-size: calc((100% - clamp(21px,4vw,62px)) * 5 / 13);
+  }
+  .selected-head h2 {
+    font-size: clamp(40px,4.55cqi,67px);
+    text-wrap: initial;
+  }
+  .selected-head-actions { margin-block-start: 14px; }
+  .home-feature h3 { font-size: clamp(37px,4.3vw,64px); }
 }
+.selected-head-actions {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px 15px;
+}
+.selected-head-actions > a { max-inline-size: 100%; white-space: normal; text-align: center; }
 
 .home-companions article { container-type: inline-size; min-inline-size: 0; }
 .home-companions article:nth-child(2) { margin-top: clamp(31px,6.5vw,108px); }

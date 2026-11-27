@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, type CSSProperties } from "react";
-import { FoldMarks } from "./print-marks";
+import { FoldMarks, RegisterMark } from "./print-marks";
 import styles from "./fold-hero.module.css";
 
 type FoldHeroProps = {
@@ -66,7 +66,6 @@ export default function FoldHero({
     const poster = landing?.querySelector("img");
     const projectLink = landing?.closest("a");
     const desktop = window.matchMedia("(min-width: 960px)");
-    const canFly = window.CSS?.supports("grid-template-columns", "subgrid");
     const canTurnPaper = window.CSS?.supports("transform-style", "preserve-3d")
       && window.CSS.supports("overflow", "clip")
       && window.CSS.supports("position", "sticky");
@@ -118,11 +117,14 @@ export default function FoldHero({
         restHeight = compact.matches ? Math.min(1, frameWidth / (frameHeight * 4 / 3)) : 1;
         printAspect = poster?.naturalHeight ? poster.naturalWidth / poster.naturalHeight : 0;
         destination = undefined;
-        if (desktop.matches && canFly && landing && poster?.naturalWidth) {
+        if (desktop.matches && landing && poster?.naturalWidth) {
           const target = landing.getBoundingClientRect();
           destination = { left: target.left, top: target.top + scroll, width: target.width, height: target.height };
           flightStart = start + 0.76 * track;
-          flightEnd = Math.max(flightStart + 0.32 * frameHeight, destination.top - 0.38 * frameHeight);
+          const section = landing.closest("section");
+          const anchorTop = (section?.getBoundingClientRect().top ?? target.top) + scroll;
+          const scrollPadding = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+          flightEnd = Math.max(flightStart + 1, Math.min(anchorTop - scrollPadding - 4, destination.top - 0.38 * frameHeight));
           carry.style.width = `${frameWidth * posterScale}px`;
           carry.style.height = `${frameHeight * posterScale}px`;
           carryImage.style.width = `${poster.naturalWidth}px`;
@@ -148,9 +150,9 @@ export default function FoldHero({
         scene.style.setProperty("--corner-turn", `${-10 * corner}deg`);
         scene.style.setProperty("--page-ink", ramp(p, 0.07, 0.42).toFixed(4));
         scene.style.setProperty("--fold-light", identify.toFixed(4));
-        scene.style.setProperty("--press-opacity", (0.66 * ramp(p, 0.14, 0.64)).toFixed(4));
-        scene.style.setProperty("--press-shift", `${-46 + 46 * expose}px`);
-        scene.style.setProperty("--press-offset", `${-84 + 84 * expose}px`);
+        scene.style.setProperty("--press-opacity", (0.79 * ramp(p, 0.12, 0.59)).toFixed(4));
+        scene.style.setProperty("--press-shift", `${-66 + 66 * expose}px`);
+        scene.style.setProperty("--press-offset", `${-96 + 96 * expose}px`);
         scene.style.setProperty("--compact-drift", `${compact.matches ? 5 * expose : 0}vw`);
         scene.style.setProperty("--top-fold", `${-23 * fold}deg`);
         scene.style.setProperty("--bottom-fold", `${37 * fold}deg`);
@@ -173,7 +175,7 @@ export default function FoldHero({
       const carrying = Boolean(destination && scroll >= flightStart && scroll < flightEnd
         && !projectLink?.contains(document.activeElement));
       if (destination && carrying && poster) {
-        const slide = ramp(scroll, flightStart, start + track);
+        const slide = ramp(scroll, flightStart, Math.min(start + track, flightEnd));
         const drop = ramp(scroll, flightStart, flightEnd);
         const width = frameWidth * posterScale;
         const height = frameHeight * posterScale;
@@ -214,6 +216,8 @@ export default function FoldHero({
     observer?.observe(scene);
     observer?.observe(frame);
     if (landing) observer?.observe(landing);
+    const selectedHeading = landing?.closest("section")?.querySelector(".selected-head");
+    if (selectedHeading) observer?.observe(selectedHeading);
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", remeasure, { passive: true });
     poster?.addEventListener("load", remeasure);
@@ -265,6 +269,7 @@ export default function FoldHero({
             <span className={styles.verso} aria-hidden="true"><span /></span>
           </span>
         </h1>
+        <RegisterMark className="hero-register" variant="crop" />
         <div className={styles.actions}>
           <p className={styles.byline}><strong>{name}</strong><span>{role}</span></p>
           <a className={styles.workLink} href={workHref} data-hero-cta>See selected work <span aria-hidden="true" /></a>

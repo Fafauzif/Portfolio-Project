@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
 import "./pointer-effects.css";
 
@@ -17,6 +18,7 @@ function lightTone(target: Element) {
 /** Lights the surface at the native cursor's position while a fine pointer moves. */
 export function PointerEffects() {
   const surface = useRef<HTMLSpanElement>(null);
+  const pathname = usePathname();
 
   useEffect(() => {
     const light = surface.current;
@@ -136,8 +138,7 @@ export function PointerEffects() {
   useEffect(() => {
     if (!('IntersectionObserver' in window)) return;
     const prints = document.querySelectorAll('[data-reveal-print]');
-    const marks = document.querySelectorAll<SVGElement>('[data-ink-reveal]');
-    if (!prints.length && !marks.length) return;
+    if (!prints.length) return;
 
     const motion = window.matchMedia('(prefers-reduced-motion: no-preference)');
     const flightLayout = window.matchMedia('(min-width: 960px)');
@@ -146,12 +147,7 @@ export function PointerEffects() {
       for (const entry of entries) {
         if (entry.intersectionRatio < .18) continue;
         observer.unobserve(entry.target);
-        if (entry.target instanceof SVGElement) {
-          entry.target.dataset.inkState = 'shown';
-          continue;
-        }
-        if (flightLayout.matches && CSS.supports('grid-template-columns', 'subgrid')
-          && entry.target.hasAttribute('data-fold-landing')) continue;
+        if (flightLayout.matches && entry.target.hasAttribute('data-fold-landing')) continue;
         const image = entry.target.querySelector<HTMLImageElement>(':scope > img');
         if (!motion.matches || !image?.animate) continue;
 
@@ -170,18 +166,31 @@ export function PointerEffects() {
     }
 
     prints.forEach(print => observer.observe(print));
-    marks.forEach(mark => {
-      mark.dataset.inkState = motion.matches ? 'waiting' : 'shown';
-      observer.observe(mark);
-    });
     motion.addEventListener('change', cancelArrivals);
     return () => {
       observer.disconnect();
-      marks.forEach(mark => delete mark.dataset.inkState);
       cancelArrivals();
       motion.removeEventListener('change', cancelArrivals);
     };
-  }, []);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (!('IntersectionObserver' in window)) return;
+    const marks = document.querySelectorAll<SVGElement>('[data-ink-reveal]');
+    const observer = new IntersectionObserver(entries => {
+      for (const entry of entries) {
+        if (!(entry.target instanceof SVGElement)) continue;
+        if (!entry.isIntersecting) delete entry.target.dataset.inkState;
+        else if (entry.intersectionRatio >= .4) entry.target.dataset.inkState = 'shown';
+      }
+    }, { threshold: [0, .4] });
+
+    marks.forEach(mark => observer.observe(mark));
+    return () => {
+      observer.disconnect();
+      marks.forEach(mark => delete mark.dataset.inkState);
+    };
+  }, [pathname]);
 
   return <span ref={surface} aria-hidden="true" data-pointer-light />;
 }

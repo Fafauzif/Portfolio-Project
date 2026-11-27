@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react';
 import './print-marks.css';
 
 export function FoldMarks() {
@@ -45,23 +46,35 @@ export function DirectoryMarks() {
         <path d="M40 161h130M203 49h105" strokeDasharray="3 5" />
       </g>
       {branches.map((path, index) => (
-        <g className="press-branch" data-ink-branch={index + 1} key={path} style={{ animationDelay: `${index * 75}ms` }}>
-          <path d={path} />
+        <g className="press-branch" data-ink-branch={index + 1} key={path} style={{ "--branch-delay": `${index * 95}ms` } as CSSProperties}>
+          <path className="press-branch-line" d={path} pathLength="1" />
           <path d={`M344 ${67 + index * 23}h9`} />
-          <circle cx="339" cy={67 + index * 23} r="3" />
+          <circle className="press-endpoint" cx="339" cy={67 + index * 23} r="3" />
+          <circle className="press-endpoint-echo" cx="339" cy={67 + index * 23} r="5" />
         </g>
       ))}
     </svg>
   );
 }
 
-export function RegisterMark({ className }: { className?: string }) {
+type MarkVariant = 'register' | 'crop' | 'signal';
+
+const markPaths: Record<MarkVariant, { fixed: string; moving: string }> = {
+  register: { fixed: 'M3 22h38M22 3v38m82-25v12', moving: 'M47 22h56M54 15h37M54 29h23' },
+  crop: { fixed: 'M6 16V7h11m15 0h9v9m0 12v9h-9m-15 0H6v-9', moving: 'M51 14h42M51 22h54M51 30h32' },
+  signal: { fixed: 'M3 22h8m20 0h10M22 3v8m0 22v8', moving: 'M47 22h10l6-9 9 18 8-13 5 4h19' },
+};
+
+export function RegisterMark({ className, variant = 'register' }: { className?: string; variant?: MarkVariant }) {
+  const { fixed, moving } = markPaths[variant];
   return (
     <svg className={`register-mark ink-reveal ${className ?? ''}`} viewBox="0 0 108 44"
-      fill="none" stroke="currentColor" strokeWidth="1.25" aria-hidden="true" data-ink-reveal>
-      <circle cx="22" cy="22" r="11" />
-      <path d="M3 22h38M22 3v38m25-19h56M54 15h37M54 29h23" />
-      <path d="M104 16v12" />
+      fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden="true" data-ink-reveal>
+      <circle className="register-echo" cx="22" cy="22" r="12" />
+      <circle className="register-core" cx="22" cy="22" r={variant === 'crop' ? 4 : 10} />
+      <path d={fixed} />
+      <path className="register-lines" d={moving} />
+      <path className="register-pass" d="M53 5v34" />
     </svg>
   );
 }

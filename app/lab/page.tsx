@@ -1,3 +1,4 @@
+import { RegisterMark } from '@/components/print-marks';
 import LabDesk from "@/components/lab-desk";
 import LabFoldStudy from "@/components/lab-fold-study";
 import { getProjects } from "@/lib/content";
@@ -20,6 +21,7 @@ export default function LabPage() {
     <main id="main-content" className={styles.lab} tabIndex={-1}>
       <header className={styles.intro}>
         <div>
+          <RegisterMark className="page-register" variant="signal" />
           <h1>The <i>Lab.</i></h1>
         </div>
         <p className={styles.introText}>

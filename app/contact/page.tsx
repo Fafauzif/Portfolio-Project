@@ -1,3 +1,4 @@
+import { RegisterMark } from '@/components/print-marks';
 import { ContactEmail } from '@/components/contact-email';
 import { getSite } from '@/lib/content';
 import { withCanonical } from '@/lib/site-metadata';
@@ -14,6 +15,7 @@ export default function ContactPage() {
           <p className="interior-lead">Tell me what you’re trying to make and where the work is getting stuck.</p>
         </header>
         <div className="contact-panel">
+          <RegisterMark className="page-register" variant="signal" />
           <h2>Email {site.name.split(' ')[0]}</h2>
           <ContactEmail email={site.contact.email} />
           {site.contact.linkedin && <a className="link-label" href={site.contact.linkedin}>LinkedIn <span className="diagonal" aria-hidden="true" /></a>}
