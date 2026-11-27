@@ -11,10 +11,10 @@ const nav = [
   { href: '/contact/', label: 'Contact' },
 ];
 
-const navy = [11, 20, 41];
-const slate = [79, 101, 140];
-const paper = [246, 245, 238];
-const ink = [24, 29, 43];
+const navy = [38, 51, 73];
+const slate = [92, 108, 134];
+const paper = [245, 242, 233];
+const ink = [37, 43, 54];
 
 function unit(value: number) {
   return Math.max(0, Math.min(1, value));
@@ -43,7 +43,7 @@ function palette(light: number) {
   const rgb = from.map((channel, index) => Math.round(channel + (to[index] - channel) * amount));
   const surfaceLuminance = luminance(rgb);
   let foreground = '#000';
-  if ((surfaceLuminance + 0.05) / (inkLuminance + 0.05) >= 4.5) foreground = '#181d2b';
+  if ((surfaceLuminance + 0.05) / (inkLuminance + 0.05) >= 4.5) foreground = 'var(--ink)';
   else if (1.05 / (surfaceLuminance + 0.05) >= 4.5) foreground = '#fff';
   return { surface: `rgb(${rgb.join(' ')})`, foreground };
 }
@@ -62,6 +62,17 @@ export default function SiteNav({ name, initials }: { name: string; initials: st
     const darkCase = Boolean(document.querySelector("main[data-category='builds']"));
     let staticHeroEnd = 0;
     let previous = '';
+    let readingFrame = 0;
+    let scrollRange = 0;
+
+    function updateReadingProgress() {
+      readingFrame = 0;
+      rail?.style.setProperty('--reading-progress', String(scrollRange ? unit(window.scrollY / scrollRange) : 0));
+    }
+
+    function scheduleReadingProgress() {
+      if (!reduced.matches && !readingFrame) readingFrame = requestAnimationFrame(updateReadingProgress);
+    }
 
     function update() {
       if (!rail) return;
@@ -95,16 +106,21 @@ export default function SiteNav({ name, initials }: { name: string; initials: st
     function refreshGeometry() {
       staticHeroEnd = hero ? Math.max(1, hero.offsetTop + hero.offsetHeight - 64) : 0;
       previous = '';
+      const scroller = document.scrollingElement;
+      scrollRange = scroller ? Math.max(0, scroller.scrollHeight - scroller.clientHeight) : 0;
       update();
+      scheduleReadingProgress();
     }
 
     function onScroll() {
       if (reduced.matches || !hero?.hasAttribute('data-fold-progress')) update();
+      scheduleReadingProgress();
     }
 
     const foldObserver = hero ? new MutationObserver(update) : null;
     if (hero) foldObserver?.observe(hero, { attributes: true, attributeFilter: ['data-fold-progress'] });
-    const geometryObserver = hero && typeof ResizeObserver !== 'undefined' ? new ResizeObserver(refreshGeometry) : null;
+    const geometryObserver = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(refreshGeometry) : null;
+    geometryObserver?.observe(document.body);
     if (hero) geometryObserver?.observe(hero);
 
     refreshGeometry();
@@ -113,6 +129,7 @@ export default function SiteNav({ name, initials }: { name: string; initials: st
     window.addEventListener('pageshow', refreshGeometry);
     reduced.addEventListener('change', refreshGeometry);
     return () => {
+      cancelAnimationFrame(readingFrame);
       foldObserver?.disconnect();
       geometryObserver?.disconnect();
       window.removeEventListener('scroll', onScroll);
@@ -153,6 +170,7 @@ export default function SiteNav({ name, initials }: { name: string; initials: st
       }}
     >
       <div className="nav-rail">
+        <span className="nav-reading-progress" aria-hidden="true" />
         <a href="/" className="brand" aria-label={name + ' home'}>
           <span className="brand-mark" aria-hidden="true">{initials}</span>
           <span className="brand-name">{name}</span>

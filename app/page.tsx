@@ -1,3 +1,4 @@
+import { CategoryIcon } from '@/components/category-icon';
 import FoldHero from '@/components/fold-hero';
 import { Button } from '@/components/ui/button';
 import { ProfileHeading } from '@/components/profile-heading';
@@ -31,7 +32,8 @@ export default function Home() {
 
   return (
     <main id="main-content" tabIndex={-1}>
-      <FoldHero cover={featuredLeading.previewCover ?? featuredLeading.cover} headline={site.tagline} workHref="#selected" />
+      <FoldHero cover={featuredLeading.previewCover ?? featuredLeading.cover} headline={site.tagline}
+        name={site.name} role={site.role} workHref="#selected" />
 
       <section className="selected wrap" id="selected" aria-labelledby="selected-title">
         <div className="selected-head">
@@ -40,11 +42,17 @@ export default function Home() {
         </div>
         <article className="home-feature">
           <a href={'/work/' + featuredLeading.slug + '/'} className="home-project-link" aria-labelledby={'selected-' + featuredLeading.slug} data-motion-link>
-            <ProjectMedia project={featuredLeading} landing />
+            <ProjectMedia project={featuredLeading} landing reveal />
             <div className="home-feature-info">
               <p className="project-meta"><span>{featuredLeading.role}</span><time dateTime={String(featuredLeading.year)}>{featuredLeading.year}</time></p>
               <h3 id={'selected-' + featuredLeading.slug}>{featuredLeading.title}</h3>
               <p>{featuredLeading.summary}</p>
+              {featuredLeading.slug === 'g-consulting-mentee-recruitment' && (
+                <figure className="home-artifact">
+                  <Image src={featuredLeading.previewCover ?? featuredLeading.cover} alt="" width={1200} height={900} />
+                  <figcaption><strong>Find Your Footing</strong><br />Concept poster for the mentee recruitment case.</figcaption>
+                </figure>
+              )}
               <span className="link-label">Read the case <span className="diagonal" aria-hidden="true" /></span>
             </div>
           </a>
@@ -70,6 +78,7 @@ export default function Home() {
           <div className="directory-links">
             {CATEGORIES.filter(category => all.some(project => project.category === category.id)).map(category => (
               <a href={'/work/category/' + category.id + '/'} key={category.id} data-motion-link>
+                <CategoryIcon category={category.id} />
                 <div><h3>{category.label}</h3><p>{category.description}</p></div>
                 <span className="diagonal" aria-hidden="true" />
               </a>
@@ -89,12 +98,19 @@ export default function Home() {
         </div>
       </section>}
 
-      <section className="home-about wrap" aria-labelledby="home-about-title">
+      <section className="home-about wrap" data-portrait={Boolean(site.portrait)} aria-labelledby="home-about-title">
         <div>
           <ProfileHeading name={site.name} as="h2" id="home-about-title" />
           <p>{site.intro}</p>
           <a className="link-label" href="/about/" data-motion-link>Read more about my work <span className="diagonal" aria-hidden="true" /></a>
         </div>
+        {site.portrait && (
+          <div className="portrait-frame" data-treatment={site.portrait.treatment} data-mirror={site.portrait.mirror || undefined}>
+            {site.portrait.treatment === 'cutout' && <span className="portrait-stock" aria-hidden="true" />}
+            <Image src={site.portrait.src} alt={site.portrait.alt}
+              width={site.portrait.width ?? 1200} height={site.portrait.height ?? 900} />
+          </div>
+        )}
       </section>
     </main>
   );

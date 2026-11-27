@@ -1,10 +1,10 @@
 .root {
-  --paper-front: #0b1429;
+  --paper-front: var(--navy);
   --paper-back: var(--paper, #f4f2eb);
-  --fold-type: #f6f4ec;
-  --fold-accent: #b0c8ff;
+  --fold-type: var(--paper);
+  --fold-accent: #c4cfe5;
   --fold-height: 100svh;
-  --fold-track: clamp(490px, 83svh, 840px);
+  --fold-track: clamp(355px, 60svh, 650px);
   --hero-type-size: min(17.25vw, 28svh, 22rem);
   --crease: .507;
   --page-ink: 0;
@@ -17,10 +17,6 @@
 
 .root[data-fold-ready] {
   min-block-size: calc(var(--fold-height) + var(--fold-track));
-}
-
-.root[data-fold-flight] {
-  z-index: 7;
 }
 
 .stage {
@@ -52,7 +48,7 @@
   inset: 66% 13% -1%;
   background: radial-gradient(ellipse, rgba(48, 57, 83, .24), rgba(48, 57, 83, 0) 65%);
   transform: scaleX(var(--sheet-scale, 1));
-  opacity: var(--page-ink);
+  opacity: calc(var(--page-ink) * var(--print-opacity, 1));
   pointer-events: none;
 }
 
@@ -185,6 +181,7 @@
 }
 
 .verso {
+  opacity: var(--print-opacity, 1);
   background: #a5beff;
   transform: rotateY(180deg);
 }
@@ -210,63 +207,32 @@
   block-size: calc(100% / (1 - var(--crease)));
 }
 
-.proxy {
-  position: fixed;
-  z-index: 4;
-  inset: 0 auto auto 0;
-  transform-origin: 0 0;
-  display: none;
-  background: #a5beff var(--fold-art) center / cover no-repeat;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.proxy[data-fold-image-ready] {
-  background-image: none;
-}
-
-.proxyImage {
-  visibility: hidden;
-  position: absolute;
-  inset: 0 auto auto 0;
-  max-width: none;
-  max-height: none;
-  transform-origin: 0 0;
-}
-
-.proxy[data-fold-image-ready] .proxyImage {
-  visibility: visible;
-}
-
-.root[data-fold-flight] .proxy {
-  display: block;
-}
-
-.root[data-fold-flight] .sheet,
-.root[data-fold-complete] .sheet {
-  opacity: 0;
-}
-
-.root[data-fold-flight] .castShadow,
-.root[data-fold-complete] .castShadow {
-  opacity: 0;
-}
-
-.root[data-fold-complete] .backdrop {
-  opacity: 1;
-}
-
-.root ~ :global(*) :global([data-fold-landing][data-fold-arrival="receiving"]) {
-  opacity: 0;
-}
-
 .actions {
   position: absolute;
   z-index: 5;
   inset-inline: clamp(1.2rem, 5vw, 5.2rem);
-  inset-block-end: clamp(1.15rem, 7svh, 4.2rem);
+  max-inline-size: 1400px;
+  margin-inline: auto;
+  inset-block-end: clamp(1.15rem, 6svh, 3.5rem);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: .7rem 1.2rem;
   pointer-events: none;
 }
+
+.byline {
+  display: grid;
+  gap: .2rem;
+  max-inline-size: 100%;
+  color: var(--fold-type);
+  font: 400 .83rem/1.25 var(--sans);
+}
+
+.byline strong { font-size: .96rem; font-weight: 650; }
+.byline span { color: var(--fold-accent); }
+.root[data-fold-cta-passed] .byline { visibility: hidden; }
 
 .workLink {
   display: inline-flex;
@@ -275,11 +241,11 @@
   align-items: center;
   justify-content: center;
   gap: 1.05rem;
-  border: 1px solid #d7e3ff;
+  border: 1px solid var(--pale-blue);
   border-radius: 4px;
   padding: .55rem .9rem .55rem 1rem;
-  background: #d7e3ff;
-  color: #101b35;
+  background: var(--pale-blue);
+  color: var(--navy);
   font: 600 .93rem / 1.15 var(--sans, sans-serif);
   text-decoration: none;
   pointer-events: auto;
@@ -321,7 +287,7 @@
 }
 
 .workLink:active {
-  background: #b0c8ff;
+  background: #c4cfe5;
 }
 
 .workLink:focus-visible {
@@ -338,15 +304,15 @@
 }
 
 .root[data-fold-cta-passed] .workLink:focus-visible {
-  background: #101b35;
-  border-color: #101b35;
+  background: var(--navy);
+  border-color: var(--navy);
   color: #f4f6ff;
-  outline-color: #3151dd;
+  outline-color: var(--blue);
 }
 
 @media (max-width: 767px) {
   .root {
-    --fold-track: clamp(280px, 54svh, 480px);
+    --fold-track: clamp(240px, 46svh, 410px);
     --hero-type-size: min(16.1vw, 15.5svh, 8.5rem);
     --crease: .417;
   }
@@ -377,7 +343,7 @@
 
   .actions {
     inset-inline: clamp(16px, 5.4vw, 32px);
-    inset-block: max(calc(var(--crease) * 100% + 2.6 * var(--hero-type-size)), 58%) auto;
+    inset-block: auto clamp(.8rem, 4svh, 1.8rem);
   }
 
   .workLink {
@@ -429,7 +395,6 @@
 
   .backdrop,
   .castShadow,
-  .proxy,
   .paperLight {
     display: none;
   }

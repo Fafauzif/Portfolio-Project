@@ -71,6 +71,7 @@
 .filters a {
   display: inline-flex;
   align-items: center;
+  gap: .38em;
   min-height: 44px;
   max-inline-size: 100%;
   border: 1px solid var(--control-rule);
@@ -228,7 +229,7 @@
   .archiveHeader { align-items: start; }
   .archiveHeader h1 { font-size: clamp(2.75rem, 15cqi, 7rem); }
   .archiveHeader[data-filtered="true"] h1 { font-size: min(clamp(2.4rem, 12.6cqi, 6rem), 19cqi); }
-  .filters { width: 100%; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .filters { width: 100%; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr)); }
   .filters a { padding-inline: .65rem; font-size: .82rem; justify-content: center; text-align: center; }
   .lead h2 { font-size: clamp(2.1rem, 10.6cqi, 4.4rem); }
   .card h2 { font-size: clamp(1.8rem, 9.4cqi, 3.4rem); }

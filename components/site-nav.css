@@ -1,7 +1,7 @@
 .site-header {
   --nav-shape: 0;
   --nav-fill: 0;
-  --nav-surface: #f6f5ee;
+  --nav-surface: var(--paper);
   --nav-ink: var(--ink);
   container: siteNavigation / inline-size;
   position: fixed;
@@ -15,7 +15,7 @@
 .site-header[data-home='true'],
 body:has(main[data-category='builds']) .site-header {
   --nav-fill: 1;
-  --nav-surface: #0b1429;
+  --nav-surface: var(--navy);
   --nav-ink: #fff;
 }
 
@@ -39,6 +39,24 @@ body:has(main[data-category='builds']) .site-header {
   background-color: color-mix(in srgb, var(--nav-surface) calc(100% * var(--nav-fill)), transparent);
   box-shadow: 0 3px 16px rgb(12 20 40 / calc(.085 * var(--nav-shape)));
   pointer-events: auto;
+}
+
+.nav-reading-progress {
+  position: absolute;
+  inset: auto 16px 0;
+  block-size: 2px;
+  border-radius: 2px;
+  background: color-mix(in srgb, currentColor 56%, var(--blue));
+  opacity: .76;
+  transform: scaleX(var(--reading-progress,0));
+  transform-origin: left center;
+  pointer-events: none;
+}
+
+.site-header[data-menu-open='true'] .nav-reading-progress { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-reading-progress { display: none; }
 }
 
 .brand {
@@ -179,4 +197,9 @@ body:has(main[data-category='builds']) .site-header {
     .nav-rail { flex-wrap: wrap; min-height: 0; gap: 0; padding-block: 4px; translate: none; }
     .primary-nav { flex: 1 0 100%; justify-content: space-between; }
   }
+}
+
+@container siteNavigation (max-width: 12rem) {
+  .brand-mark { inline-size: 26px; }
+  .brand-name { display: none; }
 }

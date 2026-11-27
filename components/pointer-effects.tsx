@@ -148,9 +148,9 @@ export function PointerEffects() {
         if (!motion.matches || !image?.animate) continue;
 
         const animation = image.animate([
-          { translate: '-0.8% 0.95%', scale: '1.055' },
+          { translate: '0 6px', scale: '1.04' },
           { translate: '0 0', scale: '1' },
-        ], { duration: 490, easing: 'cubic-bezier(.18,.65,.23,1)' });
+        ], { duration: 380, easing: 'cubic-bezier(.18,.65,.23,1)' });
         arrivals.add(animation);
         void animation.finished.then(() => arrivals.delete(animation), () => arrivals.delete(animation));
       }

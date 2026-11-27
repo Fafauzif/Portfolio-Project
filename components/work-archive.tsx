@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
+import { CategoryIcon } from "./category-icon";
+import type { Category as CategoryId } from "@/lib/content";
 import WorkArrow from "./work-arrow";
 import styles from "./work-archive.module.css";
 
@@ -8,7 +10,7 @@ type Listing = {
   slug: string;
   title: string;
   summary: string;
-  category: string;
+  category: CategoryId;
   kind: string;
   year: number;
   role: string;
@@ -21,7 +23,7 @@ type Listing = {
 };
 
 type Category = {
-  id: string;
+  id: CategoryId;
   label: string;
   description: string;
 };
@@ -130,6 +132,7 @@ export default function WorkArchive({ projects, categories, initialCategory = "a
     return terms.every(term => haystack.includes(term));
   }).sort((a, b) => Number(b.featured) - Number(a.featured));
   const showLead = terms.length === 0 && visible.length > 0;
+  const filters = [{ id: "all" as const, label: "All work" }, ...categories];
   const categorySuffix = query.trim() ? `?q=${encodeURIComponent(query)}` : "";
 
   return (
@@ -155,10 +158,11 @@ export default function WorkArchive({ projects, categories, initialCategory = "a
 
       <div className={styles.archiveBar}>
         <nav className={styles.filters} aria-label="Work categories">
-          {[{ id: "all", label: "All work" }, ...categories].map(category => (
+          {filters.map(category => (
             <a key={category.id} href={`${categoryHref(category.id)}${categorySuffix}`} data-pointer-control
               aria-current={category.id === initialCategory ? "page" : undefined}>
-              {category.label}
+              <CategoryIcon category={category.id} />
+              <span>{category.label}</span>
             </a>
           ))}
         </nav>

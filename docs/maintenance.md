@@ -90,7 +90,7 @@ The table flags hyphenated words as well. Judge deliberate hyphen breaks and tit
 | Symptom | First place to inspect |
 | --- | --- |
 | Headline cropped or gap near the fold | Hero line splitting and media queries in the hero module. Check short landscape and 320 px portrait. |
-| Poster remains floating or appears twice | The landing target or its dimensions changed. Check the home card marker and flight geometry. |
+| Poster overlaps the section heading or persists too long | Check the hero stage clipping, the print exit, and the cover reveal in its own frame. |
 | Unexpected card, Lab item, or empty case route | Check `featured`, `lab`, `heroProject`, `labProject`, and the current build's publication filter. |
 | Link falls back to a preview URL | Check the real HTTPS `url` in `content/site.json` and the route's metadata. Rebuild. |
 | Changes are absent on the old root `index.html` | Use the production preview command or visit the Vercel output. |
