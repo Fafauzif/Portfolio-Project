@@ -4,7 +4,7 @@
   --fold-type: var(--paper);
   --fold-accent: #c4cfe5;
   --fold-height: 100svh;
-  --fold-track: clamp(355px, 60svh, 650px);
+  --fold-track: clamp(560px, 92svh, 900px);
   --hero-type-size: min(17.25vw, 28svh, 22rem);
   --crease: .507;
   --page-ink: 0;
@@ -334,7 +334,7 @@
 
 @media (max-width: 767px) {
   .root {
-    --fold-track: clamp(240px, 46svh, 410px);
+    --fold-track: clamp(360px, 64svh, 560px);
     --hero-type-size: min(16.1vw, 15.5svh, 8.5rem);
     --crease: .417;
   }

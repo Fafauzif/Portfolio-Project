@@ -14,6 +14,11 @@ type FoldHeroProps = {
 
 const defaultHeadline = "What happens after the deck?";
 const posterScale = 0.74;
+// The paper keeps its own pace: a hard flick moves the page, not the fold. These
+// three numbers decide how much of the transition a reader is guaranteed to see.
+const foldRate = 1.4;
+const foldEase = 0.07;
+const foldSnap = 0.0012;
 
 function unit(value: number) {
   return Math.min(1, Math.max(0, value));
@@ -80,6 +85,8 @@ export default function FoldHero({
     let frameHeight = 1;
     let restHeight = 1;
     let settledAt = Infinity;
+    let shown = -1;
+    let lastPaint = 0;
     let destination: { left: number; top: number; width: number; height: number } | undefined;
     let frameLeft = 0;
     let flightStart = 0;
@@ -91,7 +98,7 @@ export default function FoldHero({
       landing?.removeAttribute("data-print-in-flight");
     }
 
-    function paint() {
+    function paint(now?: number) {
       animationFrame = 0;
       if (!scene || !frame || !carry || !carryImage) return;
       if (motion.matches || !canTurnPaper) {
@@ -102,6 +109,8 @@ export default function FoldHero({
         clearFlight();
         previousProgress = -1;
         settledAt = Infinity;
+        shown = -1;
+        lastPaint = 0;
         return;
       }
 
@@ -135,22 +144,46 @@ export default function FoldHero({
       }
 
       const p = unit((scroll - start) / track);
-      const fold = ramp(p, 0.06, 0.36) * (1 - ramp(p, 0.43, 0.7));
-      const expose = ramp(p, 0.25, 0.71);
-      const identify = ramp(p, 0.005, 0.24);
-      const size = 1 - (1 - posterScale) * ramp(p, 0.04, 0.72);
-      const shorten = 1 - (1 - restHeight) * ramp(p, 0.35, 0.74);
+      const time = now ?? performance.now();
+      const dt = lastPaint ? Math.min(0.05, Math.max(0.004, (time - lastPaint) / 1000)) : 0;
+      lastPaint = time;
+      // Once the stage has mostly left the viewport there is nothing left to show,
+      // so the paper stops pretending to animate and takes the reader's position.
+      const stageLeaving = frame.getBoundingClientRect().bottom < frameHeight * 0.25;
+      // The print is already in the air here; the sheet has to finish turning under
+      // it, so the cap opens up instead of lagging behind the handoff.
+      const chasing = Boolean(destination) && scroll >= flightStart;
 
-      if (Math.abs(previousProgress - p) > 0.0001) {
-        const punctuation = ramp(p, 0, 0.052) * (1 - ramp(p, 0.11, 0.27));
-        const corner = ramp(p, 0.035, 0.13) * (1 - ramp(p, 0.28, 0.46));
+      if (shown < 0 || stageLeaving) shown = p;
+      else {
+        const distance = p - shown;
+        if (Math.abs(distance) <= foldSnap) shown = p;
+        else {
+          const step = distance * (1 - Math.exp(-dt / foldEase));
+          const limit = distance > 0 ? foldRate * dt * (chasing ? 6 : 1) : Infinity;
+          shown = unit(shown + (Math.abs(step) > limit ? limit : step));
+        }
+      }
+      const g = shown;
+
+      // One beat at a time: tip the sheet, hold it, then turn it over. Ramps this
+      // heavily overlapped read as one smear when the page is moving quickly.
+      const fold = ramp(g, 0.05, 0.32) * (1 - ramp(g, 0.48, 0.72));
+      const expose = ramp(g, 0.46, 0.76);
+      const identify = ramp(g, 0.005, 0.2);
+      const size = 1 - (1 - posterScale) * ramp(g, 0.06, 0.78);
+      const shorten = 1 - (1 - restHeight) * ramp(g, 0.42, 0.8);
+
+      if (Math.abs(previousProgress - g) > 0.0001) {
+        const punctuation = ramp(g, 0, 0.052) * (1 - ramp(g, 0.11, 0.27));
+        const corner = ramp(g, 0.035, 0.13) * (1 - ramp(g, 0.28, 0.46));
         scene.style.setProperty("--question-tip", `${9 * punctuation}deg`);
         scene.style.setProperty("--question-lift", `${-0.052 * punctuation}em`);
         scene.style.setProperty("--corner-lift", `${-8 * corner}px`);
         scene.style.setProperty("--corner-turn", `${-10 * corner}deg`);
-        scene.style.setProperty("--page-ink", ramp(p, 0.07, 0.42).toFixed(4));
+        scene.style.setProperty("--page-ink", ramp(g, 0.07, 0.42).toFixed(4));
         scene.style.setProperty("--fold-light", identify.toFixed(4));
-        scene.style.setProperty("--press-opacity", (0.79 * ramp(p, 0.12, 0.59)).toFixed(4));
+        scene.style.setProperty("--press-opacity", (0.79 * ramp(g, 0.12, 0.59)).toFixed(4));
         scene.style.setProperty("--press-shift", `${-66 + 66 * expose}px`);
         scene.style.setProperty("--press-offset", `${-96 + 96 * expose}px`);
         scene.style.setProperty("--compact-drift", `${compact.matches ? 5 * expose : 0}vw`);
@@ -167,11 +200,11 @@ export default function FoldHero({
         } else {
           scene.style.removeProperty("--paper-print-size");
         }
-        scene.dataset.foldProgress = p.toFixed(3);
-        previousProgress = p;
+        scene.dataset.foldProgress = g.toFixed(3);
+        previousProgress = g;
       }
-      scene.toggleAttribute("data-fold-art-visible", p > 0.15);
-      scene.toggleAttribute("data-fold-cta-passed", p >= 0.32);
+      scene.toggleAttribute("data-fold-art-visible", g > 0.15);
+      scene.toggleAttribute("data-fold-cta-passed", g >= 0.32);
       const carrying = Boolean(destination && scroll >= flightStart && scroll < flightEnd
         && !projectLink?.contains(document.activeElement));
       if (destination && carrying && poster) {
@@ -197,6 +230,8 @@ export default function FoldHero({
       landing?.toggleAttribute("data-print-in-flight", carrying);
       const end = destination ? flightEnd : start + track;
       settledAt = scroll >= end ? end : Infinity;
+      // Keep the clock running until the paper has caught up with the page.
+      if (Math.abs(p - shown) > foldSnap) schedule();
     }
 
     function schedule() {
