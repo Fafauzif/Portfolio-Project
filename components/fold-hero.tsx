@@ -19,6 +19,10 @@ const posterScale = 0.74;
 const foldRate = 1.4;
 const foldEase = 0.07;
 const foldSnap = 0.0012;
+// The print leaves the sheet on the reader's clock too. A flick covers the whole
+// track in three frames, so a scroll-mapped flight is over before it registers.
+const flightRate = 1.5;
+const flightHandoff = 0.74;
 
 function unit(value: number) {
   return Math.min(1, Math.max(0, value));
@@ -87,6 +91,7 @@ export default function FoldHero({
     let settledAt = Infinity;
     let shown = -1;
     let lastPaint = 0;
+    let flightShown = -1;
     let destination: { left: number; top: number; width: number; height: number } | undefined;
     let frameLeft = 0;
     let flightStart = 0;
@@ -111,6 +116,7 @@ export default function FoldHero({
         settledAt = Infinity;
         shown = -1;
         lastPaint = 0;
+        flightShown = -1;
         return;
       }
 
@@ -147,12 +153,9 @@ export default function FoldHero({
       const time = now ?? performance.now();
       const dt = lastPaint ? Math.min(0.05, Math.max(0.004, (time - lastPaint) / 1000)) : 0;
       lastPaint = time;
-      // Once the stage has mostly left the viewport there is nothing left to show,
-      // so the paper stops pretending to animate and takes the reader's position.
-      const stageLeaving = frame.getBoundingClientRect().bottom < frameHeight * 0.25;
-      // The print is already in the air here; the sheet has to finish turning under
-      // it, so the cap opens up instead of lagging behind the handoff.
-      const chasing = Boolean(destination) && scroll >= flightStart;
+      // Once the stage has left the viewport there is nothing left to show, so the
+      // paper stops pretending to animate and takes the reader's position.
+      const stageLeaving = frame.getBoundingClientRect().bottom < 0;
 
       if (shown < 0 || stageLeaving) shown = p;
       else {
@@ -160,7 +163,7 @@ export default function FoldHero({
         if (Math.abs(distance) <= foldSnap) shown = p;
         else {
           const step = distance * (1 - Math.exp(-dt / foldEase));
-          const limit = distance > 0 ? foldRate * dt * (chasing ? 6 : 1) : Infinity;
+          const limit = distance > 0 ? foldRate * dt : Infinity;
           shown = unit(shown + (Math.abs(step) > limit ? limit : step));
         }
       }
@@ -205,11 +208,27 @@ export default function FoldHero({
       }
       scene.toggleAttribute("data-fold-art-visible", g > 0.15);
       scene.toggleAttribute("data-fold-cta-passed", g >= 0.32);
-      const carrying = Boolean(destination && scroll >= flightStart && scroll < flightEnd
-        && !projectLink?.contains(document.activeElement));
-      if (destination && carrying && poster) {
-        const slide = ramp(scroll, flightStart, Math.min(start + track, flightEnd));
-        const drop = ramp(scroll, flightStart, flightEnd);
+      // The sheet hands the print over at 0.74. Scroll still decides where the
+      // print rests, but its travel only starts at the handoff and is paced on the
+      // reader's clock: a flick used to drag it across the screen in two frames.
+      const clearing = Boolean(destination) && g >= flightHandoff;
+      const flightTarget = clearing ? ramp(scroll, flightStart, flightEnd) : 0;
+      if (flightShown < 0 || stageLeaving) flightShown = flightTarget;
+      else if (!clearing) flightShown = 0;
+      else {
+        const travel = flightTarget - flightShown;
+        if (Math.abs(travel) <= foldSnap) flightShown = flightTarget;
+        else {
+          const step = travel * (1 - Math.exp(-dt / foldEase));
+          const limit = travel > 0 ? flightRate * dt : Infinity;
+          flightShown = unit(flightShown + (Math.abs(step) > limit ? limit : step));
+        }
+      }
+      const drop = flightShown;
+      const slide = ramp(drop, 0, 0.82);
+      const carrying = clearing && drop < 0.998
+        && !projectLink?.contains(document.activeElement);
+      if (carrying && destination && poster) {
         const width = frameWidth * posterScale;
         const height = frameHeight * posterScale;
         const fromX = frameLeft + (frameWidth - width) / 2;
@@ -226,12 +245,12 @@ export default function FoldHero({
         carryImage.style.transform = `translate3d(${cropX}px,${cropY}px,0) scale(${coverScale / scaleX},${coverScale / scaleY})`;
       }
       scene.toggleAttribute("data-fold-flight", carrying);
-      scene.toggleAttribute("data-fold-cleared", Boolean(destination && scroll >= flightStart));
+      scene.toggleAttribute("data-fold-cleared", clearing);
       landing?.toggleAttribute("data-print-in-flight", carrying);
       const end = destination ? flightEnd : start + track;
       settledAt = scroll >= end ? end : Infinity;
-      // Keep the clock running until the paper has caught up with the page.
-      if (Math.abs(p - shown) > foldSnap) schedule();
+      // Keep the clock running until the paper and the print have caught up.
+      if (Math.abs(p - shown) > foldSnap || Math.abs(flightTarget - flightShown) > foldSnap) schedule();
     }
 
     function schedule() {
